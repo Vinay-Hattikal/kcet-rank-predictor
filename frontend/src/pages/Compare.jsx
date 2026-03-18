@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import AdPlacement from '../components/AdPlacement';
 
 const Compare = () => {
@@ -54,7 +55,12 @@ const Compare = () => {
 
   return (
     <div className="compare-page fade-in">
+      <Helmet>
+        <title>Compare Engineering Colleges | KCET & COMEDK 2024</title>
+        <meta name="description" content="Compare top engineering colleges in Karnataka side-by-side. Analyze placements, fees, and rankings for RVCE, PES, BMS, and more." />
+      </Helmet>
       <div className="container mobile-center-text" style={{ marginBottom: '2rem' }}>
+
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', fontWeight: '800', marginBottom: '0.5rem' }}>
           Compare <span className="gradient-text">Top Colleges</span>
         </h1>

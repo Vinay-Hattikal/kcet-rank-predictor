@@ -1,13 +1,13 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import AdPlacement from '../components/AdPlacement';
 
 const Home = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     examType: 'KCET',
-    marks: '',
     rank: '',
     category: 'GM',
     branch: ''
@@ -24,6 +24,12 @@ const Home = () => {
 
   return (
     <div className="home-page fade-in">
+      <Helmet>
+        <title>KCET & COMEDK Rank Predictor 2024 | Engineering College Prediction</title>
+        <meta name="description" content="Predict your dream engineering college in Karnataka with our advanced KCET & COMEDK Rank Predictor. Specialized for KCET and COMEDK 2024-25 admissions." />
+        <meta name="keywords" content="KCET rank predictor, COMEDK college predictor, Karnataka engineering admissions, KCET cutoff 2024, COMEDK rank list, college comparison" />
+      </Helmet>
+
       {/* Hero Section */}
       <section className="hero" style={{ padding: 'clamp(2rem, 10vw, 4rem) 0 3rem' }}>
         <div className="container mobile-center-text">
@@ -133,7 +139,7 @@ const Home = () => {
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
               </div>
               <h3 style={{ marginBottom: '0.5rem' }}>Data Driven</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Powered by official 2023 and 2024 cutoff data for maximum secondary accuracy.</p>
+              <p style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>Powered by official 2023 and 2024 cutoff data for maximum accuracy.</p>
             </div>
             
             <div className="card glass" style={{ padding: '1.5rem' }}>

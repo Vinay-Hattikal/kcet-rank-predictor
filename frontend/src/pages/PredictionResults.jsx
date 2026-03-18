@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import html2canvas from 'html2canvas';
 import { motion } from 'framer-motion';
+import { Helmet } from 'react-helmet-async';
 import AdPlacement from '../components/AdPlacement';
 
 const PredictionResults = () => {
@@ -84,7 +85,12 @@ const PredictionResults = () => {
 
   return (
     <div className="results-page fade-in">
+      <Helmet>
+        <title>Your College Prediction Results | {location.state?.formData?.examType} 2024</title>
+        <meta name="description" content="Personalized engineering college recommendations based on your rank. Discover your best matches for KCET and COMEDK counseling." />
+      </Helmet>
       <div id="report-content" className="container" style={{ maxWidth: '1000px' }}>
+
         
         {/* Header Summary */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: '1.5rem', marginBottom: '2.5rem', flexWrap: 'wrap' }}>
