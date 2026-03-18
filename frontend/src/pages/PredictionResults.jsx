@@ -126,7 +126,7 @@ const PredictionResults = () => {
         </div>
 
         {/* Results Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.25rem', marginBottom: '3rem' }}>
           {data.recommendations.length > 0 ? (
             data.recommendations.map((rec, index) => (
               <motion.div 
@@ -176,6 +176,73 @@ const PredictionResults = () => {
             </div>
           )}
         </div>
+
+        {/* Premium Expert Section - Persuasive Banner */}
+        <motion.div
+           initial={{ opacity: 0, y: 30 }}
+           animate={{ opacity: 1, y: 0 }}
+           transition={{ delay: 0.5 }}
+           className="card"
+           style={{ 
+             background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', 
+             border: 'none', 
+             color: '#000', 
+             padding: '2.5rem', 
+             borderRadius: '24px',
+             position: 'relative',
+             overflow: 'hidden',
+             marginBottom: '4rem'
+           }}
+        >
+          <div style={{ position: 'relative', zIndex: 2 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1rem' }}>
+               <div style={{ backgroundColor: '#000', color: '#FFD700', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '800' }}>Expert Consultation</div>
+               <span style={{ fontSize: '0.85rem', fontWeight: '700', color: '#000', opacity: 0.8 }}>Limited Slots for 2024</span>
+            </div>
+            
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '2rem' }}>
+              <div style={{ flex: '1 1 500px' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: '800', lineHeight: '1.2', marginBottom: '1.5rem' }}>
+                  Confused by the options? <br />
+                  <span style={{ color: '#000', textDecoration: 'underline' }}>One wrong choice</span> can change your entire engineering career.
+                </h2>
+                <p style={{ fontSize: '1rem', lineHeight: '1.6', fontWeight: '500', maxWidth: '600px', marginBottom: '2rem' }}>
+                  Get a 1-to-1 Personalised Strategy Report & counseling support from Karnataka's admission specialists. For a one-time fee of only ₹500, we'll guide you through every choice entry until your seat is locked. Stop the guesswork and secure your future.
+                </p>
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', fontSize: '0.9rem' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                      Direct Expert Access
+                   </div>
+                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', fontSize: '0.9rem' }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                      Round-wise Guidance
+                   </div>
+                </div>
+              </div>
+              
+              <div style={{ backgroundColor: 'rgba(0,0,0,0.05)', padding: '2rem', borderRadius: '20px', textAlign: 'center', flex: '0 1 280px', border: '1px solid rgba(0,0,0,0.1)' }}>
+                <div style={{ fontSize: '0.85rem', fontWeight: '700', textTransform: 'uppercase', marginBottom: '0.5rem' }}>One-Time Investment</div>
+                <div style={{ fontSize: '3.5rem', fontWeight: '900', marginBottom: '1rem' }}>₹500</div>
+                <motion.button 
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => navigate('/premium-counseling')}
+                  className="btn" 
+                  style={{ backgroundColor: '#000', color: '#fff', width: '100%', padding: '1rem', borderRadius: '12px', fontWeight: '800', fontSize: '1.1rem', border: 'none', cursor: 'pointer', display: 'block' }}
+                >
+                  Book My Slot
+                </motion.button>
+                <p style={{ fontSize: '0.75rem', marginTop: '1rem', opacity: 0.7, fontWeight: '600' }}>Valid until final round allocation</p>
+              </div>
+
+            </div>
+          </div>
+          
+          {/* Decorative Elements */}
+          <div style={{ position: 'absolute', right: '-50px', top: '-50px', width: '200px', height: '200px', backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '50%', zIndex: 1 }} />
+          <div style={{ position: 'absolute', left: '-30px', bottom: '-30px', width: '150px', height: '150px', backgroundColor: 'rgba(0,0,0,0.03)', borderRadius: '50%', zIndex: 1 }} />
+        </motion.div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `

@@ -9,6 +9,7 @@ import PredictionResults from './pages/PredictionResults';
 import Compare from './pages/Compare';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import PremiumCounseling from './pages/PremiumCounseling';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
@@ -21,10 +22,12 @@ const AnimatedRoutes = () => {
         <Route path="/compare" element={<PageWrapper><Compare /></PageWrapper>} />
         <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />
         <Route path="/admin" element={<PageWrapper><Admin /></PageWrapper>} />
+        <Route path="/premium-counseling" element={<PageWrapper><PremiumCounseling /></PageWrapper>} />
       </Routes>
     </AnimatePresence>
   );
 };
+
 
 const PageWrapper = ({ children }) => (
   <motion.div

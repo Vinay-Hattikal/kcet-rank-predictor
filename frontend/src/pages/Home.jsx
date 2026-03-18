@@ -52,88 +52,140 @@ const Home = () => {
         </div>
       </section>
 
-      <div className="container" style={{ maxWidth: '900px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
+      <div className="container" style={{ maxWidth: '1000px' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '3rem' }}>
           
           {/* Main Predictor Form */}
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="card glass"
-            style={{ padding: '0.5rem' }}
-          >
-            <div className="card-body">
-              <div style={{ marginBottom: '2rem' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Start Your Prediction</h2>
-                <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Enter your details below to see where you stand.</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem' }}>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2 }}
+              className="card glass"
+              style={{ padding: '0.5rem' }}
+            >
+              <div className="card-body">
+                <div style={{ marginBottom: '2rem' }}>
+                  <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Start Your Prediction</h2>
+                  <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Enter your details below to see where you stand.</p>
+                </div>
+
+                <form onSubmit={handleSubmit}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Entrance Exam</label>
+                      <select name="examType" value={formData.examType} onChange={handleChange} className="form-select" required>
+                        <option value="KCET">KCET (Karnataka CET)</option>
+                        <option value="COMEDK">COMEDK UGET</option>
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Your Rank</label>
+                      <input type="number" name="rank" value={formData.rank} onChange={handleChange} className="form-input" placeholder="Enter Actual Rank" min="1" required />
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                    <div className="form-group">
+                      <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Caste Category</label>
+                      <select name="category" value={formData.category} onChange={handleChange} className="form-select" required>
+                        {formData.examType === 'COMEDK' ? (
+                          <>
+                            <option value="GM">GM (General Merit)</option>
+                            <option value="KKR">KKR (Kalyana-Karnataka)</option>
+                          </>
+                        ) : (
+                          <>
+                            <option value="GM">GM (General Merit)</option>
+                            <option value="GMK">GMK (Kannada Medium)</option>
+                            <option value="GMR">GMR (Rural)</option>
+                            <option value="SCG">SCG (SC General)</option>
+                            <option value="STG">STG (ST General)</option>
+                            <option value="1G">Category 1</option>
+                            <option value="2AG">Category 2A</option>
+                            <option value="3AG">Category 3A</option>
+                            <option value="3BG">Category 3B</option>
+                          </>
+                        )}
+                      </select>
+                    </div>
+                    
+                    <div className="form-group">
+                      <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Preferred Branch</label>
+                      <input type="text" name="branch" value={formData.branch} onChange={handleChange} className="form-input" placeholder="e.g. CS, AI, Mech" />
+                    </div>
+                  </div>
+
+                  <motion.button 
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit" 
+                    className="btn btn-primary w-full" 
+                    style={{ padding: '1rem', fontSize: '1.1rem', marginTop: '1rem' }}
+                  >
+                    Analyze My Chances
+                  </motion.button>
+                </form>
               </div>
+            </motion.div>
 
-              <form onSubmit={handleSubmit}>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Entrance Exam</label>
-                    <select name="examType" value={formData.examType} onChange={handleChange} className="form-select" required>
-                      <option value="KCET">KCET (Karnataka CET)</option>
-                      <option value="COMEDK">COMEDK UGET</option>
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Your Rank</label>
-                    <input type="number" name="rank" value={formData.rank} onChange={handleChange} className="form-input" placeholder="Enter Actual Rank" min="1" required />
-                  </div>
+            {/* Premium Section */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+              className="card"
+              style={{ background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)', border: 'none', color: '#000', padding: '2rem' }}
+            >
+              <div style={{ marginBottom: '1.5rem' }}>
+                <span style={{ backgroundColor: '#000', color: '#FFD700', padding: '4px 12px', borderRadius: '20px', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase', marginBottom: '1rem', display: 'inline-block' }}>
+                  Premium Expert Service
+                </span>
+                <h2 style={{ fontSize: '1.75rem', fontWeight: '800', lineHeight: '1.2', marginBottom: '1rem' }}>
+                  Stop the Guesswork. <br />Secure Your Seat.
+                </h2>
+                <p style={{ fontSize: '0.9rem', lineHeight: '1.5', opacity: 0.9, fontWeight: '500' }}>
+                  Don’t gamble with your engineering career. Get a 1-to-1 Personalised Strategy Report & counseling support from experts who know the system inside-out.
+                </p>
+              </div>
+              
+              <ul style={{ padding: 0, margin: '0 0 2rem 0', listStyle: 'none' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', fontSize: '0.9rem', fontWeight: '600' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                  Custom Choice Entry List
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', fontSize: '0.9rem', fontWeight: '600' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                  Personalised Rank Analysis
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px', fontSize: '0.9rem', fontWeight: '600' }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><path d="M20 6L9 17l-5-5"/></svg>
+                  Valid till Counseling Completion
+                </li>
+              </ul>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 'auto' }}>
+                <div>
+                  <span style={{ fontSize: '1.2rem', fontWeight: '800' }}>₹500</span>
+                  <span style={{ fontSize: '0.8rem', opacity: 0.8, marginLeft: '4px' }}>One-time fee</span>
                 </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '1.5rem' }}>
-                  <div className="form-group">
-                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Caste Category</label>
-                    <select name="category" value={formData.category} onChange={handleChange} className="form-select" required>
-                      {formData.examType === 'COMEDK' ? (
-                        <>
-                          <option value="GM">GM (General Merit)</option>
-                          <option value="KKR">KKR (Kalyana-Karnataka)</option>
-                        </>
-                      ) : (
-                        <>
-                          <option value="GM">GM (General Merit)</option>
-                          <option value="GMK">GMK (Kannada Medium)</option>
-                          <option value="GMR">GMR (Rural)</option>
-                          <option value="SCG">SCG (SC General)</option>
-                          <option value="STG">STG (ST General)</option>
-                          <option value="1G">Category 1</option>
-                          <option value="2AG">Category 2A</option>
-                          <option value="3AG">Category 3A</option>
-                          <option value="3BG">Category 3B</option>
-                        </>
-                      )}
-                    </select>
-                  </div>
-                  
-                  <div className="form-group">
-                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.875rem', marginBottom: '0.5rem', display: 'block' }}>Preferred Branch</label>
-                    <input type="text" name="branch" value={formData.branch} onChange={handleChange} className="form-input" placeholder="e.g. CS, AI, Mech" />
-                  </div>
-                </div>
-
                 <motion.button 
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  type="submit" 
-                  className="btn btn-primary w-full" 
-                  style={{ padding: '1rem', fontSize: '1.1rem', marginTop: '1rem' }}
+                  whileHover={{ scale: 1.05 }}
+                  onClick={() => navigate('/premium-counseling')}
+                  className="btn" 
+                  style={{ backgroundColor: '#000', color: '#fff', borderRadius: '12px', padding: '10px 20px', fontWeight: '700', border: 'none', cursor: 'pointer' }}
                 >
-                  Analyze My Chances
+                  Apply Now
                 </motion.button>
-              </form>
-            </div>
-          </motion.div>
 
-          {/* Ad Placement */}
-          <AdPlacement type="horizontal" />
+              </div>
+            </motion.div>
+          </div>
 
           {/* Feature Grid */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '4rem' }}>
+            {/* Same feature cards as before... */}
             <div className="card glass" style={{ padding: '1.5rem' }}>
               <div style={{ color: 'var(--primary)', marginBottom: '1rem' }}>
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="M22 4L12 14.01l-3-3"/></svg>
