@@ -38,11 +38,16 @@ app.use('/api/leads', require('./routes/leads'));
 
 // Global Error Handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
+  console.error('Error:', err.message);
+  if (err.stack) console.error(err.stack);
+  
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
+  
+  // In production, we usually hide stack traces, but for setup phase we can show more message info
   res.status(statusCode).json({
     message: err.message,
-    stack: process.env.NODE_ENV === 'production' ? null : err.stack,
+    code: err.code || 'INTERNAL_ERROR',
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
   });
 });
 
