@@ -95,6 +95,10 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                 const collegeObj = await College.findOneAndUpdate(
                   { name: { $regex: new RegExp(`^${cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
                   { 
+                    $setOnInsert: {
+                      placements: { averagePackage: 0, highestPackage: 0 },
+                      fees: { government: 0, management: 0 }
+                    },
                     name: cleanName, 
                     location: 'Karnataka',
                     slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
@@ -248,6 +252,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
         let currentCollegeId = null;
         let currentFileCutoffs = 0;
         let batchOps = [];
+        let insideCollegeBlock = false;
         const BATCH_SIZE = 500;
 
         const stream = fs.createReadStream(file.path).pipe(csv({ headers: false }));

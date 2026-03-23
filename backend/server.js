@@ -55,6 +55,14 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+// Ensure uploads directory exists
+const fs = require('fs');
+const path = require('path');
+const uploadDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 // Fix: Ensure MONGO_URI is provided by Railway/Environment
 if (!process.env.MONGO_URI) {
   console.error('CRITICAL ERROR: MONGO_URI is not defined in environment variables.');
