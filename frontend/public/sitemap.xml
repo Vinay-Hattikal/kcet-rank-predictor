@@ -21,6 +21,31 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://rank2college.in/about</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rank2college.in/contact</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.5</priority>
+  </url>
+  <url>
+    <loc>https://rank2college.in/privacy-policy</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://rank2college.in/terms-of-service</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://rank2college.in/disclaimer</loc>
+    <lastmod>2026-03-23</lastmod>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://rank2college.in/college/univesity-of-visvesvaraya-college-of-engineering-k-r-circle</loc>
     <lastmod>2026-03-21</lastmod>
     <priority>0.7</priority>

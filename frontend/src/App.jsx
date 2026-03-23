@@ -13,6 +13,11 @@ const Admin = lazy(() => import('./pages/Admin'));
 const Login = lazy(() => import('./pages/Login'));
 const PremiumCounseling = lazy(() => import('./pages/PremiumCounseling'));
 const CollegeDetails = lazy(() => import('./pages/CollegeDetails'));
+const AboutUs = lazy(() => import('./pages/AboutUs'));
+const ContactUs = lazy(() => import('./pages/ContactUs'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('./pages/TermsOfService'));
+const Disclaimer = lazy(() => import('./pages/Disclaimer'));
 
 const LoadingFallback = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -35,6 +40,11 @@ const AnimatedRoutes = () => {
           <Route path="/admin" element={<PageWrapper><Admin /></PageWrapper>} />
           <Route path="/premium-counseling" element={<PageWrapper><PremiumCounseling /></PageWrapper>} />
           <Route path="/college/:slug" element={<PageWrapper><CollegeDetails /></PageWrapper>} />
+          <Route path="/about" element={<PageWrapper><AboutUs /></PageWrapper>} />
+          <Route path="/contact" element={<PageWrapper><ContactUs /></PageWrapper>} />
+          <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
+          <Route path="/terms-of-service" element={<PageWrapper><TermsOfService /></PageWrapper>} />
+          <Route path="/disclaimer" element={<PageWrapper><Disclaimer /></PageWrapper>} />
         </Routes>
       </Suspense>
     </AnimatePresence>

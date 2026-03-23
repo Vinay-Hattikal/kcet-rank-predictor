@@ -17,7 +17,8 @@ import {
   Award,
   Zap,
   BarChart,
-  CheckCircle2
+  CheckCircle2,
+  Instagram
 } from 'lucide-react';
 
 const Home = () => {
@@ -308,6 +309,49 @@ const Home = () => {
             </motion.div>
           </motion.div>
         </div>
+          {/* Instagram Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            style={{
+              background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
+              borderRadius: 'var(--radius-xl)',
+              padding: '3rem 2rem',
+              textAlign: 'center',
+              color: '#fff',
+              marginBottom: '4rem'
+            }}
+          >
+            <Instagram size={40} style={{ marginBottom: '1rem', opacity: 0.9 }} />
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '0.75rem' }}>Follow Us on Instagram</h2>
+            <p style={{ opacity: 0.9, fontSize: '1.05rem', fontWeight: 500, marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem' }}>
+              Get daily KCET & COMEDK tips, cutoff updates, and counseling advice straight to your feed.
+            </p>
+            <motion.a
+              href="https://www.instagram.com/mycetguide"
+              target="_blank"
+              rel="noopener noreferrer"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.6rem',
+                background: '#fff',
+                color: '#833ab4',
+                padding: '0.85rem 2rem',
+                borderRadius: '50px',
+                fontWeight: '800',
+                fontSize: '1rem',
+                textDecoration: 'none',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+              }}
+            >
+              <Instagram size={20} /> @mycetguide
+            </motion.a>
+          </motion.div>
+
       </div>
       
       <style>{`

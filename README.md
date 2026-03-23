@@ -1,4 +1,88 @@
-# 🎓 Smart College Predictor (KCET & COMEDK)
+# 🎓 Rank2College — KCET & COMEDK Rank Predictor
+
+> **Live at:** [rank2college.in](https://rank2college.in)
+
+A premium, data-driven college prediction platform designed specifically for students appearing in **KCET** and **COMEDK** in Karnataka. Features a modern responsive UI with Glassmorphism, staggered animations, and a robust admin dashboard.
+
+## 🚀 Key Features
+- **Precise Predictions**: Uses historical KCET & COMEDK cutoff data to predict admission chances.
+- **Side-by-Side Comparison**: Compare colleges based on placements, fees, and location.
+- **Premium UI/UX**: Built with HSL color palettes, Glassmorphism, and Framer Motion animations.
+- **Mobile First**: Fully responsive design verified on various viewports.
+- **Admin Portal**: Secure dashboard for uploading CSV data and managing college metadata.
+- **Monetization Ready**: Integrated Google AdSense placeholders.
+- **AdSense Compliant**: All required pages present — About, Contact, Privacy Policy, Terms of Service, Disclaimer.
+
+---
+
+## 🛠️ Tech Stack
+- **Frontend**: React (Vite), Framer Motion, Axios, HSL CSS Layers.
+- **Backend**: Node.js, Express.js.
+- **Database**: MongoDB (Mongoose).
+- **Authentication**: JWT-based secure admin access.
+
+---
+
+## 🏗️ Building From Scratch
+
+### 1. Project Initialization
+```bash
+# Initialize Vite Frontend
+npx create-vite frontend --template react
+# Initialize Backend
+mkdir backend && cd backend && npm init -y
+```
+
+### 2. Dependency Setup
+**Frontend**: `npm install axios framer-motion react-router-dom`
+**Backend**: `npm install express mongoose dotenv cors jsonwebtoken bcryptjs`
+
+### 3. Database Schema
+Defined models for `College`, `Cutoff`, and `User` in MongoDB.
+- **College**: Stores metadata like placements, fees, and ranking.
+- **Cutoff**: Stores round-wise ranks for various categories (GM, 2AG, etc.) and branches.
+
+---
+
+## 📦 Deployment Guide
+
+### Backend (e.g., Render)
+1. Set up a MongoDB Atlas cluster.
+2. Add environment variables: `MONGO_URI`, `JWT_SECRET`, `PORT=5000`.
+3. Connect your GitHub repo and point to `backend/server.js`.
+
+### Frontend (e.g., Vercel/Netlify)
+1. Import the `frontend` directory.
+2. Build Command: `npm run build` | Output: `dist`
+
+---
+
+## 📬 Contact & Social
+- **Email**: [mail-debugspheres@gmail.com](mailto:mail-debugspheres@gmail.com)
+- **Instagram**: [@mycetguide](https://www.instagram.com/mycetguide)
+- **GitHub**: [kcet-rank-predictor](https://github.com/Vinay-Hattikal/kcet-rank-predictor)
+
+---
+
+## 📄 Legal Pages (AdSense Required)
+All required pages are implemented and routed:
+- `/about` — About Us
+- `/contact` — Contact Us
+- `/privacy-policy` — Privacy Policy
+- `/terms-of-service` — Terms of Service
+- `/disclaimer` — Disclaimer
+
+---
+
+## 🔒 Security & Best Practices
+- **Environment Variables**: Never commit your `.env` file.
+- **Data Integrity**: Admin-only routes are protected by JWT middleware.
+
+---
+
+## 📝 Disclaimer
+Prediction results are based on historical cutoff trends and are for reference only. Verify all information with official counseling authorities (KEA/COMEDK).
+
 
 A premium, data-driven college prediction platform designed specifically for students in Karnataka and beyond. This project features a modern, responsive UI with Glassmorphism, staggered animations, and a robust admin dashboard for data management.
 
