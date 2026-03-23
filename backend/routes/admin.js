@@ -260,6 +260,39 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
   }
 });
 
+// @route POST /api/admin/colleges/bulk (Alternative JSON-based)
+router.post('/colleges/bulk', protectAdmin, async (req, res) => {
+  try {
+    const { colleges } = req.body;
+    if (!colleges || !Array.isArray(colleges)) {
+      return res.status(400).json({ message: 'Invalid data format' });
+    }
+
+    let totalUpdated = 0;
+    for (const collegeData of colleges) {
+      const normalizedName = collegeData.name.trim().replace(/\s+/g, ' ');
+      await College.findOneAndUpdate(
+        { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
+        {
+          $setOnInsert: {
+             placements: { averagePackage: 0, highestPackage: 0 },
+             fees: { government: 0, management: 0 }
+          },
+          ...collegeData,
+          name: normalizedName,
+          slug: normalizedName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
+        },
+        { upsert: true, runValidators: true, setDefaultsOnInsert: true }
+      );
+      totalUpdated++;
+    }
+    res.json({ message: `Successfully updated ${totalUpdated} colleges via JSON.` });
+  } catch (error) {
+    console.error('Bulk College Error:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 router.post('/colleges/:id', protectAdmin, async (req, res) => {
   try {
     const college = await College.findByIdAndUpdate(req.params.id, req.body, { new: true });
@@ -468,6 +501,40 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
   } catch (error) {
     console.error('Cutoffs Upload Error:', error);
     res.status(500).json({ success: false, message: error.message || 'Error processing cutoff data' });
+  }
+});
+
+// @route POST /api/admin/cutoffs/bulk (Alternative JSON-based)
+router.post('/cutoffs/bulk', protectAdmin, async (req, res) => {
+  try {
+    const { cutoffs, examType, year, roundNumber } = req.body;
+    if (!cutoffs || !Array.isArray(cutoffs)) {
+      return res.status(400).json({ message: 'Invalid data format' });
+    }
+
+    const batchOps = cutoffs.map(c => ({
+      updateOne: {
+        filter: { 
+          collegeId: c.collegeId, 
+          examType: examType || 'KCET', 
+          year: year || 2024, 
+          roundNumber: roundNumber || 1, 
+          courseName: c.courseName, 
+          category: c.category 
+        },
+        update: { ...c, closingRank: parseFloat(c.closingRank) },
+        upsert: true
+      }
+    }));
+
+    if (batchOps.length > 0) {
+      await Cutoff.bulkWrite(batchOps);
+    }
+
+    res.json({ success: true, message: `Successfully updated ${batchOps.length} cutoff records via JSON.` });
+  } catch (error) {
+    console.error('Bulk Cutoff Error:', error);
+    res.status(500).json({ success: false, message: error.message });
   }
 });
 

@@ -143,29 +143,146 @@ const Admin = () => {
       return;
     }
     
-    const data = new FormData();
-    for (let i = 0; i < targetFiles.length; i++) {
-        data.append('files', targetFiles[i]);
-    }
-    
-    if (type === 'cutoffs') {
-      data.append('examType', formData.examType);
-      data.append('year', formData.year);
-      data.append('roundNumber', formData.roundNumber);
-    }
+    setLoading(true);
+    setMessage('Parsing files in browser...');
 
     try {
-      setLoading(true);
-      setMessage('Processing... This may take a moment.');
       const token = localStorage.getItem('token');
-      const endpoint = type === 'cutoffs' ? '/admin/cutoffs/upload' : '/admin/colleges/upload';
-      const res = await axios.post(endpoint, data, {
-        headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
-      });
-      setMessage(res.data.message || 'Upload successful!');
-      if (type === 'colleges') fetchColleges();
+      let totalParsed = 0;
+
+      for (let i = 0; i < targetFiles.length; i++) {
+        const file = targetFiles[i];
+        const text = await file.text();
+        const rows = text.split(/\r?\n/).filter(l => l.trim()).map(line => {
+          const delimiter = line.includes(';') && !line.includes(',') ? ';' : ',';
+          return line.split(delimiter).map(c => c.trim().replace(/^"|"$/g, ''));
+        });
+
+        if (type === 'colleges') {
+          const collegesToUpload = [];
+          let insideCollegeBlock = false;
+          let currentCollege = null;
+          let headersMapped = false;
+          let columnMap = {};
+
+          for (const columns of rows) {
+             const collegeHeader = columns.find(c => c && c.toLowerCase().includes('college:'));
+             if (collegeHeader) {
+               if (currentCollege) collegesToUpload.push(currentCollege);
+               insideCollegeBlock = true;
+               const name = collegeHeader.split(/college:/i)[1]?.trim();
+               currentCollege = { name, location: 'Karnataka', placements: { averagePackage: 0, highestPackage: 0 }, fees: { government: 0, management: 0 } };
+             } else if (insideCollegeBlock && columns.some(c => c.toLowerCase().includes('placement') || c.toLowerCase().includes('nirf'))) {
+               const fullText = columns.join(' | ');
+               const segments = fullText.split(/[|;]/).map(s => s.trim());
+               segments.forEach(seg => {
+                 const s = seg.toLowerCase();
+                 const getVal = (reg, t) => { const m = t.match(reg); return m ? m[1] : null; };
+                 if (s.includes('nirf')) currentCollege.ranking = parseInt(getVal(/:\s*(\d+)/, seg)) || 0;
+                 if (s.includes('avg') && s.includes('place')) currentCollege.placements.averagePackage = (parseFloat(getVal(/:\s*([\d.]+)/, seg)) || 0) * 100000;
+                 if (s.includes('highest')) currentCollege.placements.highestPackage = (parseFloat(getVal(/:\s*([\d.]+)/, seg)) || 0) * 100000;
+                 if (s.includes('govt')) currentCollege.fees.government = (parseFloat(getVal(/:\s*([\d.]+)/, seg)) || 0) * 100000;
+                 if (s.includes('mgmt')) currentCollege.fees.management = (parseFloat(getVal(/:\s*([\d.]+)/, seg)) || 0) * 100000;
+                 if (s.includes('city')) currentCollege.location = getVal(/:\s*([^|]+)/, seg) || 'Karnataka';
+               });
+             } else {
+               // Traditional
+               if (!headersMapped) {
+                 if (columns.some(c => c.toLowerCase().includes('college name'))) {
+                   columns.forEach((c, idx) => {
+                     const l = c.toLowerCase();
+                     if (l.includes('college name')) columnMap.name = idx;
+                     if (l.includes('city') || l.includes('location')) columnMap.location = idx;
+                     if (l.includes('nirf')) columnMap.ranking = idx;
+                     if (l.includes('avg') && l.includes('place')) columnMap.avgPl = idx;
+                     if (l.includes('high') && l.includes('place')) columnMap.highPl = idx;
+                     if (l.includes('govt')) columnMap.govtFee = idx;
+                     if (l.includes('mgmt')) columnMap.mgmtFee = idx;
+                   });
+                   headersMapped = true;
+                 }
+               } else {
+                 const name = columns[columnMap.name];
+                 if (name && name.length > 3 && !name.toLowerCase().includes('college name')) {
+                   collegesToUpload.push({
+                     name,
+                     location: columns[columnMap.location] || 'Karnataka',
+                     ranking: parseInt(columns[columnMap.ranking]) || 0,
+                     placements: {
+                       averagePackage: (parseFloat(columns[columnMap.avgPl]) || 0) * 100000,
+                       highestPackage: (parseFloat(columns[columnMap.highPl]) || 0) * 100000
+                     },
+                     fees: {
+                       government: (parseFloat(columns[columnMap.govtFee]) || 0) * 100000,
+                       management: (parseFloat(columns[columnMap.mgmtFee]) || 0) * 100000
+                     }
+                   });
+                 }
+               }
+             }
+          }
+          if (currentCollege) collegesToUpload.push(currentCollege);
+          
+          if (collegesToUpload.length > 0) {
+            setMessage(`Uploading ${collegesToUpload.length} colleges...`);
+            const res = await axios.post('/admin/colleges/bulk', { colleges: collegesToUpload }, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            totalParsed += collegesToUpload.length;
+          }
+        } 
+        else {
+          // Cutoffs - Need current colleges to map IDs
+          const cutoffsToUpload = [];
+          let currentCollegeObj = null;
+          let insideBlock = false;
+          let categoriesList = [];
+
+          for (const columns of rows) {
+            const isKCETHeader = columns.some(c => ['1G', 'GM', 'SCG'].includes(c.toUpperCase()));
+            if (isKCETHeader) {
+              categoriesList = [];
+              const targetCats = ['1G', '1K', '1R', '2AG', '2AK', '2AR', '2BG', '2BK', '2BR', '3AG', '3AK', '3AR', '3BG', '3BK', '3BR', 'GM', 'GMK', 'GMR', 'GMP', 'SCG', 'SCK', 'SCR', 'STG', 'STK', 'STR', 'KKR', 'NRI', 'OPN', 'OTH'];
+              columns.forEach((col, idx) => {
+                if (targetCats.includes(col.toUpperCase())) categoriesList.push({ name: col.toUpperCase(), index: idx });
+              });
+            } else if (columns.some(c => c.toLowerCase().includes('college:'))) {
+              insideBlock = true;
+              const colText = columns.find(c => c.toLowerCase().includes('college:'));
+              const rawName = colText.split(/college:/i)[1]?.trim().replace(/^[A-Z]\d{3}\s+/i, '').split(',')[0].trim();
+              currentCollegeObj = colleges.find(c => c.name.toLowerCase().includes(rawName.toLowerCase()) || rawName.toLowerCase().includes(c.name.toLowerCase()));
+            } else {
+              const course = columns[0];
+              if (insideBlock && currentCollegeObj && course && course.length > 2 && !course.toLowerCase().includes('course')) {
+                categoriesList.forEach(cat => {
+                  const rank = parseFloat(columns[cat.index]);
+                  if (rank > 0) {
+                    cutoffsToUpload.push({ collegeId: currentCollegeObj._id, courseName: course, category: cat.name, closingRank: rank });
+                  }
+                });
+              }
+            }
+          }
+
+          if (cutoffsToUpload.length > 0) {
+            setMessage(`Uploading ${cutoffsToUpload.length} cutoffs...`);
+            await axios.post('/admin/cutoffs/bulk', { 
+              cutoffs: cutoffsToUpload,
+              examType: formData.examType,
+              year: formData.year,
+              roundNumber: formData.roundNumber
+            }, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+            totalParsed += cutoffsToUpload.length;
+          }
+        }
+      }
+      setMessage(`Successfully processed all data!`);
+      fetchColleges();
     } catch (err) {
-      setMessage(err.response?.data?.message || 'Upload failed');
+      console.error(err);
+      setMessage(err.response?.data?.message || 'Upload failed during processing');
     } finally {
       setLoading(false);
     }
