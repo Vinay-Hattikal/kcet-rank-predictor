@@ -274,10 +274,6 @@ router.post('/colleges/bulk', protectAdmin, async (req, res) => {
       await College.findOneAndUpdate(
         { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
         {
-          $setOnInsert: {
-             placements: { averagePackage: 0, highestPackage: 0 },
-             fees: { government: 0, management: 0 }
-          },
           ...collegeData,
           name: normalizedName,
           slug: normalizedName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
