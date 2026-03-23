@@ -14,7 +14,7 @@ const Login = () => {
     setLoading(true);
     setError('');
     try {
-      const res = await axios.post(`/api/auth/login`, formData);
+      const res = await axios.post('/auth/login', formData);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', res.data.role);
       navigate('/admin');

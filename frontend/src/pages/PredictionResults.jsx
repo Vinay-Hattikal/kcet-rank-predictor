@@ -32,7 +32,7 @@ const PredictionResults = () => {
 
     const fetchPrediction = async () => {
       try {
-        const res = await axios.post('/api/predict', location.state.formData);
+        const res = await axios.post('/predict', location.state.formData);
         const sortedRecs = (res.data.recommendations || []).sort((a, b) => a.closingRank - b.closingRank);
         setData({ ...res.data, recommendations: sortedRecs });
       } catch (err) {

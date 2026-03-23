@@ -4,7 +4,6 @@ import axios from '../api/axios';
 import { Search, Loader2, MapPin, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const CollegeSearch = () => {
   const [query, setQuery] = useState('');

@@ -36,7 +36,7 @@ const Admin = () => {
 
   const fetchColleges = async () => {
     try {
-      const res = await axios.get('/api/colleges');
+      const res = await axios.get('/colleges');
       setColleges(res.data);
     } catch (err) {
       console.error('Error fetching colleges', err);
@@ -46,7 +46,7 @@ const Admin = () => {
   const fetchLeads = async () => {
     try {
       const token = localStorage.getItem('token');
-      const res = await axios.get('/api/leads', {
+      const res = await axios.get('/leads', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setLeads(res.data);
@@ -123,7 +123,7 @@ const Admin = () => {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const endpoint = type === 'cutoffs' ? '/api/admin/cutoffs' : '/api/admin/colleges';
+      const endpoint = type === 'cutoffs' ? '/admin/cutoffs' : '/admin/colleges';
       await axios.delete(endpoint, { headers: { Authorization: `Bearer ${token}` } });
       setMessage(`${type === 'cutoffs' ? 'Cutoff' : 'College'} data cleared successfully!`);
       if (type === 'colleges') fetchColleges();
@@ -158,7 +158,7 @@ const Admin = () => {
       setLoading(true);
       setMessage('Processing... This may take a moment.');
       const token = localStorage.getItem('token');
-      const endpoint = type === 'cutoffs' ? '/api/admin/cutoffs/upload' : '/api/admin/colleges/upload';
+      const endpoint = type === 'cutoffs' ? '/admin/cutoffs/upload' : '/admin/colleges/upload';
       const res = await axios.post(endpoint, data, {
         headers: { 'Content-Type': 'multipart/form-data', 'Authorization': `Bearer ${token}` }
       });
