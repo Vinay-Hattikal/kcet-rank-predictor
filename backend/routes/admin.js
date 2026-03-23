@@ -31,7 +31,12 @@ const protectAdmin = async (req, res, next) => {
   }
 };
 
-const upload = multer({ dest: 'uploads/' });
+const path = require('path');
+const uploadDir = path.resolve(__dirname, '../uploads');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir, { recursive: true });
+}
+const upload = multer({ dest: uploadDir });
 
 // @route DELETE /api/admin/colleges
 router.delete('/colleges', protectAdmin, async (req, res) => {
@@ -103,7 +108,7 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                     location: 'Karnataka',
                     slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
                   },
-                  { upsert: true, new: true }
+                  { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
                 );
                 currentCollegeId = collegeObj._id;
                 totalUpdated++;
@@ -185,6 +190,10 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                   await College.findOneAndUpdate(
                     { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
                     {
+                      $setOnInsert: {
+                        placements: { averagePackage: 0, highestPackage: 0 },
+                        fees: { government: 0, management: 0 }
+                      },
                       name: normalizedName,
                       location: columns[columnMap.location] || 'Karnataka',
                       ranking: ranking,
@@ -198,7 +207,7 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                       },
                       slug: normalizedName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
                     },
-                    { upsert: true, returnDocument: 'after' }
+                    { upsert: true, returnDocument: 'after', runValidators: true, setDefaultsOnInsert: true }
                   );
                   totalUpdated++;
                 }
@@ -220,7 +229,8 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
 
     res.json({ message: `Successfully updated ${totalUpdated} college detail records.` });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error('Colleges Upload Error:', error);
+    res.status(500).json({ message: error.message || 'Error processing college details' });
   }
 });
 
@@ -305,7 +315,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                    location: 'Karnataka',
                    slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
                  },
-                 { upsert: true, new: true }
+                 { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
                );
                currentCollegeId = collegeObj._id;
             }
@@ -374,7 +384,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                          location: 'Karnataka',
                          slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
                        },
-                       { upsert: true, returnDocument: 'after' }
+                       { upsert: true, returnDocument: 'after', runValidators: true, setDefaultsOnInsert: true }
                      );
                      
                      // Auto-populate coursesOffered for transposed too
@@ -423,7 +433,8 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
     }
     res.status(200).json({ success: true, message: `Successfully parsed ${totalCutoffsParsed} cutoff records.` });
   } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
+    console.error('Cutoffs Upload Error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Error processing cutoff data' });
   }
 });
 
