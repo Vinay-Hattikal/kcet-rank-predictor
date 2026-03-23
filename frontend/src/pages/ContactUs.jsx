@@ -12,7 +12,7 @@ const ContactUs = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Using mailto as a simple no-backend solution
-    const mailtoLink = `mailto:mail-debugspheres@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
+    const mailtoLink = `mailto:debugspheres@gmail.com?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`)}`;
     window.location.href = mailtoLink;
     setSubmitted(true);
   };
@@ -29,7 +29,7 @@ const ContactUs = () => {
         <p style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>Have questions or feedback? We're here to help.</p>
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2.5rem' }}>
-          <InfoCard icon="📧" label="Email" value="mail-debugspheres@gmail.com" href="mailto:mail-debugspheres@gmail.com" />
+          <InfoCard icon="📧" label="Email" value="debugspheres@gmail.com" href="mailto:debugspheres@gmail.com" />
           <InfoCard icon="🌐" label="Website" value="rank2college.in" href="https://rank2college.in" />
         </div>
 

@@ -64,7 +64,7 @@ const PremiumCounseling = () => {
               
               <div style={{ display: 'grid', gap: '1rem' }}>
                 <a 
-                  href="mailto:mail-debugspheres@gmail.com?subject=Enrolling for Personalised Expert Counseling" 
+                  href="mailto:debugspheres@gmail.com?subject=Enrolling for Personalised Expert Counseling" 
                   className="btn btn-primary"
                   style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', fontWeight: '800' }}
                 >

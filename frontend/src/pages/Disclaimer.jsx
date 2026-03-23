@@ -43,7 +43,7 @@ const Disclaimer = () => {
         </p>
 
         <h2 style={h2Style}>5. Contact Us</h2>
-        <p>If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at: <a href="mailto:mail-debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>mail-debugspheres@gmail.com</a></p>
+        <p>If you require any more information or have any questions about our site's disclaimer, please feel free to contact us by email at: <a href="mailto:debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>debugspheres@gmail.com</a></p>
       </div>
     </>
   );

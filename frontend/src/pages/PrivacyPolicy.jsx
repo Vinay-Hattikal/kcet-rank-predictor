@@ -49,7 +49,7 @@ const PrivacyPolicy = () => {
         <p>We may update this Privacy Policy from time to time. We will notify you of any changes by updating the "Last updated" date at the top of this page.</p>
 
         <h2 style={h2Style}>9. Contact Us</h2>
-        <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:mail-debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>mail-debugspheres@gmail.com</a></p>
+        <p>If you have any questions about this Privacy Policy, please contact us at: <a href="mailto:debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>debugspheres@gmail.com</a></p>
       </div>
     </>
   );

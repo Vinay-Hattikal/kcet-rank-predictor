@@ -46,7 +46,7 @@ const TermsOfService = () => {
         <p>These Terms shall be governed by the laws of <strong>India</strong>. Any disputes shall be subject to the jurisdiction of the courts in Karnataka, India.</p>
 
         <h2 style={h2Style}>10. Contact Us</h2>
-        <p>If you have questions about these Terms, please contact us at: <a href="mailto:mail-debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>mail-debugspheres@gmail.com</a></p>
+        <p>If you have questions about these Terms, please contact us at: <a href="mailto:debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>debugspheres@gmail.com</a></p>
       </div>
     </>
   );

@@ -38,7 +38,7 @@ const AboutUs = () => {
 
         <h2 style={h2Style}>Contact Us</h2>
         <p>Have questions or feedback? We'd love to hear from you.</p>
-        <p>📧 Email: <a href="mailto:mail-debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>mail-debugspheres@gmail.com</a></p>
+        <p>📧 Email: <a href="mailto:debugspheres@gmail.com" style={{ color: 'var(--primary)' }}>debugspheres@gmail.com</a></p>
         <p>🌐 Website: <a href="https://rank2college.in" style={{ color: 'var(--primary)' }}>rank2college.in</a></p>
       </div>
     </>
