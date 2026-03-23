@@ -28,6 +28,50 @@ class StripBOM extends Transform {
 
 const router = express.Router();
 
+// Helper to safely upsert colleges without triggering E11000 duplicate key errors on slug
+const upsertCollegeSafe = async (name, updateData = {}) => {
+  const normalizedName = name.trim().replace(/\s+/g, ' ');
+  const regex = new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\\\$&').replace(/\\\\\\./g, '\\\\.?')}$`, 'i');
+  const tempSlug = normalizedName.toLowerCase().replace(/[^\\w\\s-]/g, '').replace(/[\\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+  
+  let college = await College.findOne({
+    $or: [{ name: { $regex: regex } }, { slug: tempSlug }]
+  });
+
+  if (college) {
+    if (Object.keys(updateData).length > 0) {
+      if (updateData.placements) {
+        college.placements = college.placements || { averagePackage: 0, highestPackage: 0 };
+        Object.assign(college.placements, updateData.placements);
+        delete updateData.placements;
+      }
+      if (updateData.fees) {
+        college.fees = college.fees || { government: 0, management: 0 };
+        Object.assign(college.fees, updateData.fees);
+        delete updateData.fees;
+      }
+      Object.assign(college, updateData);
+    }
+    if (!college.slug) college.slug = tempSlug;
+    await college.save();
+    return college;
+  } else {
+    college = new College({
+      name: normalizedName,
+      location: updateData.location || 'Karnataka',
+      ...updateData
+    });
+    if (!college.placements || college.placements.averagePackage === undefined) {
+      college.placements = { averagePackage: 0, highestPackage: 0, ...(updateData.placements || {}) };
+    }
+    if (!college.fees || college.fees.government === undefined) {
+      college.fees = { government: 0, management: 0, ...(updateData.fees || {}) };
+    }
+    await college.save();
+    return college;
+  }
+};
+
 const protectAdmin = async (req, res, next) => {
   let token;
   if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -123,19 +167,7 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                 const cleanName = normalize(rawName);
                 
                 console.log(`Searching for college: "${cleanName}"`);
-                const collegeObj = await College.findOneAndUpdate(
-                  { name: { $regex: new RegExp(`^${cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
-                  { 
-                    $setOnInsert: {
-                      placements: { averagePackage: 0, highestPackage: 0 },
-                      fees: { government: 0, management: 0 }
-                    },
-                    name: cleanName, 
-                    location: 'Karnataka',
-                    slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
-                  },
-                  { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
-                );
+                const collegeObj = await upsertCollegeSafe(cleanName, { location: 'Karnataka' });
                 currentCollegeId = collegeObj._id;
                 totalUpdated++;
               }
@@ -213,24 +245,18 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                   const mgmtFee = parseFeeValue(mFeeRaw);
                   const normalizedName = name.trim().replace(/\s+/g, ' ');
 
-                  await College.findOneAndUpdate(
-                    { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
-                    {
-                      name: normalizedName,
-                      location: columns[columnMap.location] || 'Karnataka',
-                      ranking: ranking,
-                      placements: {
-                        averagePackage: avgPl > 0 && avgPl < 100 ? avgPl * 100000 : avgPl,
-                        highestPackage: highPl > 0 && highPl < 500 ? highPl * 100000 : highPl
-                      },
-                      fees: {
-                        government: govtFee,
-                        management: mgmtFee
-                      },
-                      slug: normalizedName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
+                  await upsertCollegeSafe(normalizedName, {
+                    location: columns[columnMap.location] || 'Karnataka',
+                    ranking: ranking,
+                    placements: {
+                      averagePackage: avgPl > 0 && avgPl < 100 ? avgPl * 100000 : avgPl,
+                      highestPackage: highPl > 0 && highPl < 500 ? highPl * 100000 : highPl
                     },
-                    { upsert: true, returnDocument: 'after', runValidators: true, setDefaultsOnInsert: true }
-                  );
+                    fees: {
+                      government: govtFee,
+                      management: mgmtFee
+                    }
+                  });
                   totalUpdated++;
                 }
               }
@@ -267,15 +293,7 @@ router.post('/colleges/bulk', protectAdmin, async (req, res) => {
     let totalUpdated = 0;
     for (const collegeData of colleges) {
       const normalizedName = collegeData.name.trim().replace(/\s+/g, ' ');
-      await College.findOneAndUpdate(
-        { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
-        {
-          ...collegeData,
-          name: normalizedName,
-          slug: normalizedName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
-        },
-        { upsert: true, runValidators: true, setDefaultsOnInsert: true }
-      );
+      await upsertCollegeSafe(normalizedName, collegeData);
       totalUpdated++;
     }
     res.json({ message: `Successfully updated ${totalUpdated} colleges via JSON.` });
@@ -362,19 +380,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                
                const cleanName = normalize(rawText);
                console.log('Detection (Cutoffs): Found College ->', cleanName);
-               const collegeObj = await College.findOneAndUpdate(
-                 { name: { $regex: new RegExp(`^${cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
-                 { 
-                   $setOnInsert: {
-                     placements: { averagePackage: 0, highestPackage: 0 },
-                     fees: { government: 0, management: 0 }
-                   },
-                   name: cleanName, 
-                   location: 'Karnataka',
-                   slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
-                 },
-                 { upsert: true, new: true, runValidators: true, setDefaultsOnInsert: true }
-               );
+                const collegeObj = await upsertCollegeSafe(cleanName, { location: 'Karnataka' });
                currentCollegeId = collegeObj._id;
             }
             else if (insideCollegeBlock && columns.some(c => c && (c.toLowerCase().includes('placement') || c.toLowerCase().includes('nirf'))) && currentCollegeId) {
@@ -431,19 +437,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                      const normalize = (text) => text.replace(/^[A-Z]\d{3}\s+/i, '').split(',')[0].replace(/\[.*?\]/g, '').replace(/\s+/g, ' ').trim();
                      const cleanName = normalize(rawName);
 
-                     const collegeObj = await College.findOneAndUpdate(
-                       { name: { $regex: new RegExp(`^${cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
-                       { 
-                         $setOnInsert: {
-                           placements: { averagePackage: 0, highestPackage: 0 },
-                           fees: { government: 0, management: 0 }
-                         },
-                         name: cleanName, 
-                         location: 'Karnataka',
-                         slug: cleanName.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '')
-                       },
-                       { upsert: true, returnDocument: 'after', runValidators: true, setDefaultsOnInsert: true }
-                     );
+                     const collegeObj = await upsertCollegeSafe(cleanName, { location: 'Karnataka' });
                      
                      // Auto-populate coursesOffered for transposed too
                      const courseNameTransposed = columns[0].trim(); // Actually in transposed, course might be different? Wait.
