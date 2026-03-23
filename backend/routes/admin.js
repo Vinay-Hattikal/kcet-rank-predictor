@@ -216,10 +216,6 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
                   await College.findOneAndUpdate(
                     { name: { $regex: new RegExp(`^${normalizedName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
                     {
-                      $setOnInsert: {
-                        placements: { averagePackage: 0, highestPackage: 0 },
-                        fees: { government: 0, management: 0 }
-                      },
                       name: normalizedName,
                       location: columns[columnMap.location] || 'Karnataka',
                       ranking: ranking,
@@ -458,7 +454,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                        const rankVal = columns[course.index];
                        if (rankVal && !isNaN(parseFloat(rankVal)) && parseFloat(rankVal) > 0) {
                          const filter = { collegeId: collegeObj._id, examType, year, roundNumber, courseName: course.name.trim(), category };
-                         batchOps.push({ updateOne: { filter, update: { ...filter, closingRank: parseFloat(rankVal) }, upsert: true } });
+                         batchOps.push({ updateOne: { filter, update: { $set: { closingRank: parseFloat(rankVal) } }, upsert: true } });
                        }
                      }
                    }
@@ -467,7 +463,7 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
                      const rankVal = columns[cat.index];
                      if (rankVal && !isNaN(parseFloat(rankVal)) && parseFloat(rankVal) > 0) {
                        const filter = { collegeId: currentCollegeId, examType, year, roundNumber, courseName, category: cat.name };
-                       batchOps.push({ updateOne: { filter, update: { ...filter, closingRank: parseFloat(rankVal) }, upsert: true } });
+                       batchOps.push({ updateOne: { filter, update: { $set: { closingRank: parseFloat(rankVal) } }, upsert: true } });
                      }
                    }
                  }
@@ -518,7 +514,7 @@ router.post('/cutoffs/bulk', protectAdmin, async (req, res) => {
           courseName: c.courseName, 
           category: c.category 
         },
-        update: { ...c, closingRank: parseFloat(c.closingRank) },
+        update: { $set: { closingRank: parseFloat(c.closingRank) } },
         upsert: true
       }
     }));
