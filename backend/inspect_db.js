@@ -9,15 +9,11 @@ const inspectData = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB');
 
-    const college = await College.findOne({ name: /PES UNIVERSITY/i });
-    if (college) {
-      console.log('Found College:', college.name);
-      console.log('Ranking:', college.ranking);
-      console.log('Location:', college.location);
-      console.log('Placements:', JSON.stringify(college.placements));
-      console.log('Fees:', JSON.stringify(college.fees));
-    } else {
-      console.log('College not found');
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    console.log('Collections in database:');
+    for (let collection of collections) {
+      const count = await mongoose.connection.db.collection(collection.name).countDocuments();
+      console.log(`${collection.name}: ${count}`);
     }
     process.exit(0);
   } catch (err) {

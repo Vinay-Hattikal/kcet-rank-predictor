@@ -61,7 +61,7 @@ const Home = () => {
       />
 
       {/* Hero Section */}
-      <section className="hero-premium" style={{ padding: 'clamp(5rem, 10vw, 8rem) 0 4rem', position: 'relative', zIndex: 20 }}>
+      <section className="hero-premium" style={{ padding: 'clamp(5rem, 10vw, 8rem) 0 4rem', position: 'relative' }}>
         <div className="container" style={{ textAlign: 'center' }}>
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -81,7 +81,7 @@ const Home = () => {
 
             <motion.div 
               className="glass-card"
-              style={{ maxWidth: '800px', margin: '0 auto 1.5rem', padding: '0.75rem', borderRadius: 'var(--radius-xl)' }}
+              style={{ maxWidth: '800px', margin: '0 auto 1.5rem', padding: '0.75rem', borderRadius: 'var(--radius-xl)', position: 'relative', zIndex: 100 }}
               whileHover={{ scale: 1.01 }}
             >
               <CollegeSearch />
@@ -94,7 +94,7 @@ const Home = () => {
       </section>
 
       {/* Trust Stats Bar */}
-      <div className="container" style={{ marginTop: '-4rem', marginBottom: '4rem', position: 'relative', zIndex: 30 }}>
+      <div className="container" style={{ marginTop: '-4rem', marginBottom: '4rem', position: 'relative', zIndex: 10 }}>
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

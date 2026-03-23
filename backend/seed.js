@@ -27,7 +27,7 @@ const seedData = async () => {
     console.log('Admin user created');
 
     // Colleges
-    const colleges = await College.insertMany([
+    const colleges = await College.create([
       {
         name: 'RV College of Engineering',
         location: 'Bengaluru',
