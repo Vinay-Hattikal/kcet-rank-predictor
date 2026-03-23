@@ -1,0 +1,9 @@
+{
+  "name": "kcet-rank-predictor-root",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Root configuration for Railway monorepo support",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
