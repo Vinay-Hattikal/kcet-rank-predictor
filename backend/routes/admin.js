@@ -6,6 +6,25 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const fs = require('fs');
 const csv = require('csv-parser');
+const { Transform } = require('stream');
+
+// Manual BOM stripping stream
+class StripBOM extends Transform {
+  constructor() {
+    super();
+    this.firstChunk = true;
+  }
+  _transform(chunk, encoding, callback) {
+    if (this.firstChunk) {
+      if (chunk[0] === 0xEF && chunk[1] === 0xBB && chunk[2] === 0xBF) {
+        chunk = chunk.slice(3);
+      }
+      this.firstChunk = false;
+    }
+    this.push(chunk);
+    callback();
+  }
+}
 
 const router = express.Router();
 
@@ -76,12 +95,18 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
         let currentCollegeId = null;
 
         const stream = fs.createReadStream(file.path)
+          .pipe(new StripBOM())
           .pipe(csv({ headers: false }));
 
         stream.on('data', async (row) => {
           stream.pause();
           try {
-            const columns = Object.values(row).map(c => c?.trim() || '');
+            let columns = Object.values(row).map(c => c?.trim() || '');
+            
+            // Auto-detect semicolon separator
+            if (columns.length === 1 && columns[0].includes(';') && !columns[0].includes(',')) {
+              columns = columns[0].split(';').map(c => c.trim());
+            }
             
             // Log for forensics
             console.log(`[CSV Data] Row: ${columns.slice(0, 2).join(' | ')}...`);
@@ -94,9 +119,10 @@ router.post('/colleges/upload', protectAdmin, upload.array('files'), async (req,
               insideCollegeBlock = true;
               const rawName = collegeCol.split(/college:/i)[1]?.trim();
               if (rawName) {
-                const normalize = (text) => text.replace(/^[A-Z]\d{3}\s+/i, '').split(',')[0].replace(/\[.*?\]/g, '').replace(/\s+/g, ' ').trim();
+                const normalize = (text) => text.replace(/^\uFEFF/g, '').replace(/^[A-Z]\d{3}\s+/i, '').split(',')[0].replace(/\[.*?\]/g, '').replace(/\s+/g, ' ').trim();
                 const cleanName = normalize(rawName);
                 
+                console.log(`Searching for college: "${cleanName}"`);
                 const collegeObj = await College.findOneAndUpdate(
                   { name: { $regex: new RegExp(`^${cleanName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\./g, '\\.?')}$`, 'i') } },
                   { 
@@ -265,12 +291,19 @@ router.post('/cutoffs/upload', protectAdmin, upload.array('files'), async (req, 
         let insideCollegeBlock = false;
         const BATCH_SIZE = 500;
 
-        const stream = fs.createReadStream(file.path).pipe(csv({ headers: false }));
+        const stream = fs.createReadStream(file.path)
+          .pipe(new StripBOM())
+          .pipe(csv({ headers: false }));
 
         stream.on('data', async (row) => {
           stream.pause();
           try {
-            const columns = Object.values(row).map(c => c?.trim() || '');
+            let columns = Object.values(row).map(c => c?.trim() || '');
+
+            // Auto-detect semicolon separator
+            if (columns.length === 1 && columns[0].includes(';') && !columns[0].includes(',')) {
+              columns = columns[0].split(';').map(c => c.trim());
+            }
             const isCOMEDKHeader = columns[2] && columns[2].toLowerCase().includes('category');
             const isKCETHeader = columns.some(c => ['1G', '2AG', 'GM', 'SCG'].includes(c.trim().toUpperCase()));
 
