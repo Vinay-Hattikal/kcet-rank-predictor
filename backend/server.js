@@ -55,6 +55,7 @@ const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
+// Fix: Ensure MONGO_URI is provided by Railway/Environment
 if (!process.env.MONGO_URI) {
   console.error('CRITICAL ERROR: MONGO_URI is not defined in environment variables.');
   process.exit(1);
