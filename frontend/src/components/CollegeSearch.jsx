@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import axios from '../api/axios';
 import { Search, Loader2, MapPin, GraduationCap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -29,7 +29,7 @@ const CollegeSearch = () => {
       if (query.trim().length > 1) {
         setLoading(true);
         try {
-          const res = await axios.get(`/api/colleges?search=${query}`);
+          const res = await axios.get(`/colleges?search=${query}`);
           setResults(res.data);
           setShowResults(true);
         } catch (err) {

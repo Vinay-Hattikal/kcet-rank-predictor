@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import axios from '../api/axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
 import AdPlacement from '../components/AdPlacement';
@@ -21,7 +21,7 @@ const Compare = () => {
 
     const delayDebounceFn = setTimeout(async () => {
       try {
-        const res = await axios.get(`/api/colleges?search=${searchTerm}`);
+        const res = await axios.get(`/colleges?search=${searchTerm}`);
         setSearchResults(res.data);
         setError('');
       } catch (err) {

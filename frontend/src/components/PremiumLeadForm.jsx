@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
+import axios from '../api/axios';
 
 const PremiumLeadForm = () => {
     const [formData, setFormData] = useState({
@@ -23,7 +23,7 @@ const PremiumLeadForm = () => {
         setError('');
         
         try {
-            await axios.post('/api/leads', formData);
+            await axios.post('/leads', formData);
             setIsSubmitted(true);
         } catch (err) {
             setError('Something went wrong. Please try again later.');

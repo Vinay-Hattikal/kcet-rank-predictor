@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import SEO from '../components/SEO';
-import axios from 'axios';
+import axios from '../api/axios';
 import { 
   MapPin, 
   GraduationCap, 
@@ -16,7 +16,6 @@ import {
   Calendar
 } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const CollegeDetails = () => {
   const { slug } = useParams();
@@ -30,7 +29,7 @@ const CollegeDetails = () => {
     const fetchDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`${API_URL}/colleges/slug/${slug}`);
+        const response = await axios.get(`/colleges/slug/${slug}`);
         setData(response.data);
         
         if (response.data.cutoffs.length > 0) {
