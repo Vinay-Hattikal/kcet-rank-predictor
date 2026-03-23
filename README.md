@@ -81,6 +81,4 @@ A custom script `seedAdmin.js` was created to initialize the first administrator
 ## 📝 Disclaimer
 These prediction results are generated based on historical cutoff trends and should be used for reference purposes only. College rankings and admission thresholds are subject to significant year-on-year variations. We strongly recommend verifying all information with official counseling authorities.
 
----
 
-**Developed with ❤️ by Antigravity**

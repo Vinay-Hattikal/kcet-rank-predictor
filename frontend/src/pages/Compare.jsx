@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Helmet } from 'react-helmet-async';
+import SEO from '../components/SEO';
 import AdPlacement from '../components/AdPlacement';
 
 const Compare = () => {
@@ -55,10 +55,11 @@ const Compare = () => {
 
   return (
     <div className="compare-page fade-in">
-      <Helmet>
-        <title>Compare Engineering Colleges | KCET & COMEDK 2024</title>
-        <meta name="description" content="Compare top engineering colleges in Karnataka side-by-side. Analyze placements, fees, and rankings for RVCE, PES, BMS, and more." />
-      </Helmet>
+      <SEO 
+        title="Compare Engineering Colleges | KCET & COMEDK 2024"
+        description="Compare top engineering colleges in Karnataka side-by-side. Analyze placements, fees, and rankings for RVCE, PES, BMS, and more."
+        keywords="compare engineering colleges, KCET college comparison, COMEDK college comparison"
+      />
       <div className="container mobile-center-text" style={{ marginBottom: '2rem' }}>
 
         <h1 style={{ fontSize: 'clamp(2rem, 5vw, 2.5rem)', fontWeight: '800', marginBottom: '0.5rem' }}>
@@ -76,7 +77,7 @@ const Compare = () => {
       )}
 
       {/* Search Section */}
-      <div className="container" style={{ maxWidth: '700px', marginBottom: '2rem' }}>
+      <div className="container" style={{ maxWidth: '700px', marginBottom: '2rem', position: 'relative', zIndex: 100 }}>
         <div className="card glass" style={{ overflow: 'visible' }}>
           <div className="card-body" style={{ padding: '0.75rem' }}>
             <div style={{ position: 'relative' }}>

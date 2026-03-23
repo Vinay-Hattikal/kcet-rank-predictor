@@ -1,5 +1,6 @@
 const express = require('express');
 const College = require('../models/College');
+const Cutoff = require('../models/Cutoff');
 
 const router = express.Router();
 
@@ -32,6 +33,28 @@ router.get('/compare', async (req, res) => {
     const colleges = await College.find({ '_id': { $in: idArray } });
     
     res.json(colleges);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// @route GET /api/colleges/slug/:slug
+router.get('/slug/:slug', async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const college = await College.findOne({ slug });
+    
+    if (!college) {
+      return res.status(404).json({ message: 'College not found' });
+    }
+    
+    // Fetch all cutoffs for this college
+    const cutoffs = await Cutoff.find({ collegeId: college._id }).sort({ year: -1, roundNumber: 1 });
+    
+    res.json({
+      college,
+      cutoffs
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

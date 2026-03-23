@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
+import PremiumLeadForm from '../components/PremiumLeadForm';
 
 const PremiumCounseling = () => {
   useEffect(() => {
@@ -21,7 +22,7 @@ const PremiumCounseling = () => {
           className="card glass"
           style={{ padding: '3rem', border: '2px solid #FFD700' }}
         >
-          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <span className="badge" style={{ backgroundColor: '#FFD700', color: '#000', marginBottom: '1rem', fontWeight: '800' }}>
               EXPERT ADMISSION SERVICE
             </span>
@@ -32,6 +33,9 @@ const PremiumCounseling = () => {
               One wrong choice can waste years of hard work. Our experts guide you through every step of the KCET/COMEDK counseling process.
             </p>
           </div>
+
+          {/* Lead Capturing Form */}
+          <PremiumLeadForm />
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
             <div>

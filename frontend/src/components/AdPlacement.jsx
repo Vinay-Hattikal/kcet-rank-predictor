@@ -1,25 +1,19 @@
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 
-const AdPlacement = ({ type = 'horizontal', label = 'Sponsored' }) => {
-  // In production, this would contain the <ins> tag for Google AdSense
-  // For now, we provide a premium-looking placeholder
-  
-  const styles = {
-    horizontal: {
-      width: '100%',
-      height: '100px',
-      margin: '2rem 0'
-    },
-    vertical: {
-      width: '250px',
-      height: '600px',
-      margin: '0 1rem'
-    },
-    rectangle: {
-      width: '300px',
-      height: '250px',
-      margin: '1rem'
+const AdPlacement = ({ type = 'horizontal', adSlot, adClient = 'ca-pub-YOUR_PUBLISHER_ID' }) => {
+  useEffect(() => {
+    try {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+    } catch (e) {
+      console.warn('AdSense error:', e);
     }
+  }, []);
+
+  const styles = {
+    horizontal: { width: '100%', minHeight: '100px', margin: '2rem 0' },
+    vertical: { width: '250px', minHeight: '600px', margin: '0 1rem' },
+    rectangle: { width: '300px', minHeight: '250px', margin: '1rem' }
   };
 
   return (
@@ -29,55 +23,27 @@ const AdPlacement = ({ type = 'horizontal', label = 'Sponsored' }) => {
       className="ad-container"
       style={{
         ...styles[type],
-        background: 'linear-gradient(135deg, hsl(215, 20%, 95%), hsl(215, 20%, 98%))',
-        border: '1px dashed var(--border-color)',
-        borderRadius: 'var(--radius-md)',
         display: 'flex',
-        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        position: 'relative',
+        background: '#f9fafb',
+        border: '1px solid #e5e7eb',
+        borderRadius: '12px',
         overflow: 'hidden'
       }}
     >
-      <span style={{ 
-        position: 'absolute', 
-        top: '4px', 
-        right: '8px', 
-        fontSize: '0.65rem', 
-        color: 'var(--text-muted)',
-        fontWeight: '600',
-        textTransform: 'uppercase',
-        letterSpacing: '0.05em'
-      }}>
-        {label}
-      </span>
+      {/* Real AdSense Tag */}
+      <ins className="adsbygoogle"
+           style={{ display: 'block', width: '100%', height: '100%' }}
+           data-ad-client={adClient}
+           data-ad-slot={adSlot}
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
       
-      <div style={{ padding: '1rem', textAlign: 'center' }}>
-        <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '4px' }}>Ad Space</p>
-        <div style={{ 
-          width: '32px', 
-          height: '2px', 
-          background: 'var(--border-color)', 
-          margin: '0 auto',
-          borderRadius: '1px' 
-        }} />
+      {/* Placeholder Fallback (only visible if ad doesn't load) */}
+      <div style={{ position: 'absolute', zIndex: -1, color: '#9ca3af', fontSize: '0.75rem' }}>
+        Advertisement Space
       </div>
-
-      {/* Animation Overlay */}
-      <motion.div 
-        animate={{ x: ['-100%', '200%'] }}
-        transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '50%',
-          height: '100%',
-          background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent)',
-          pointerEvents: 'none'
-        }}
-      />
     </motion.div>
   );
 };

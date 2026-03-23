@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
 
+# Exclude admin routes
+Disallow: /admin
+Disallow: /login
+
 # Sitemaps
-Sitemap: https://yourdomain.com/sitemap.xml
+Sitemap: https://rank2college.in/sitemap.xml

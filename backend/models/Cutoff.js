@@ -11,4 +11,13 @@ const cutoffSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+cutoffSchema.index(
+  { collegeId: 1, examType: 1, year: 1, roundNumber: 1, courseName: 1, category: 1 },
+  { unique: true }
+);
+
+// Performance index for prediction queries
+cutoffSchema.index({ examType: 1, category: 1, closingRank: 1 });
+cutoffSchema.index({ closingRank: 1 });
+
 module.exports = mongoose.model('Cutoff', cutoffSchema);

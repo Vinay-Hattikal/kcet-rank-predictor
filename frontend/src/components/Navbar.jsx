@@ -1,15 +1,26 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { GraduationCap, Menu, X, LogOut, ChevronRight } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const isAdmin = localStorage.getItem('role') === 'admin';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Compare', path: '/compare' },
+    { name: 'Premium', path: '/premium-counseling' },
   ];
 
   if (isAdmin) {
@@ -17,124 +28,150 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="navbar glass">
-      <div className="container navbar-container">
+    <nav
+      className={`navbar ${scrolled ? 'scrolled' : ''}`}
+      style={{
+        height: '5rem',
+        display: 'flex',
+        alignItems: 'center',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1000,
+        transition: 'all 0.3s ease',
+        background: scrolled ? 'rgba(255, 255, 255, 0.8)' : 'transparent',
+        backdropFilter: scrolled ? 'blur(12px)' : 'none',
+        borderBottom: scrolled ? '1px solid var(--border-color)' : '1px solid transparent'
+      }}
+    >
+      <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <Link to="/" className="navbar-brand" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', textDecoration: 'none' }}>
-          <div style={{ backgroundColor: 'var(--primary)', padding: '8px', borderRadius: '12px', display: 'flex' }}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-            </svg>
-          </div>
-          <span className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: '800', letterSpacing: '-0.02em' }}>CollegePredictor</span>
+          <motion.div
+            whileHover={{ rotate: 5 }}
+            style={{ backgroundColor: 'var(--primary)', padding: '10px', borderRadius: '14px', display: 'flex', boxShadow: '0 4px 12px rgba(79, 70, 229, 0.2)' }}
+          >
+            <GraduationCap size={24} color="white" />
+          </motion.div>
+          <span className="gradient-text" style={{ fontSize: '1.5rem', fontWeight: '900', letterSpacing: '-0.03em' }}>Rank2College</span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="navbar-nav desktop-nav" style={{ display: 'none' }}>
-           {navLinks.map(link => (
-             <Link 
-               key={link.path} 
-               to={link.path} 
-               className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
-               style={{ 
-                 padding: '0.5rem 1rem', 
-                 color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-muted)',
-                 fontWeight: location.pathname === link.path ? '700' : '500',
-                 textDecoration: 'none',
-                 fontSize: '0.95rem',
-                 transition: 'color 0.2s' 
-               }}
-             >
-               {link.name}
-             </Link>
-           ))}
-           {isAdmin && (
-              <button 
-                onClick={() => { localStorage.clear(); window.location.href = '/'; }}
-                className="btn btn-secondary"
-                style={{ padding: '0.5rem 1.25rem', fontSize: '0.875rem' }}
-              >
-                Logout
-              </button>
-           )}
+        <div className="desktop-nav" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+          {navLinks.map(link => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={`nav-link ${location.pathname === link.path ? 'active' : ''}`}
+              style={{
+                padding: '0.6rem 1.25rem',
+                color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-main)',
+                fontWeight: location.pathname === link.path ? '800' : '600',
+                textDecoration: 'none',
+                fontSize: '0.95rem',
+                borderRadius: 'var(--radius-md)',
+                transition: 'all 0.2s ease',
+                background: location.pathname === link.path ? 'var(--primary-light)' : 'transparent'
+              }}
+            >
+              {link.name}
+            </Link>
+          ))}
+          {isAdmin && (
+            <button
+              onClick={() => { localStorage.clear(); window.location.href = '/'; }}
+              className="btn btn-secondary"
+              style={{ marginLeft: '1rem', padding: '0.5rem 1rem', fontSize: '0.85rem' }}
+            >
+              <LogOut size={16} /> Logout
+            </button>
+          )}
         </div>
 
         {/* Mobile Toggle */}
-        <button 
+        <button
           className="mobile-toggle"
           onClick={() => setIsOpen(!isOpen)}
-          style={{ display: 'block', background: 'hsl(215, 20%, 95%)', border: 'none', cursor: 'pointer', padding: '10px', borderRadius: '12px', color: 'var(--text-main)' }}
+          style={{ background: 'var(--primary-light)', border: 'none', cursor: 'pointer', padding: '10px', borderRadius: '12px', color: 'var(--primary)' }}
         >
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            {isOpen ? <path d="M18 6L6 18M6 6l12 12"/> : <path d="M3 12h18M3 6h18M3 18h18"/>}
-          </svg>
+          {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
       </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div 
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="mobile-menu"
-            style={{ 
-              position: 'absolute',
-              top: '100%',
-              left: 0,
-              right: 0,
-              background: 'var(--surface)',
-              borderTop: '1px solid var(--border-color)',
-              boxShadow: 'var(--shadow-lg)',
-              zIndex: 100
-            }}
-          >
-            <div className="container" style={{ padding: '1.5rem' }}>
-              <div className="flex flex-col gap-4">
-                {navLinks.map(link => (
-                  <Link 
-                    key={link.path} 
-                    to={link.path} 
-                    onClick={() => setIsOpen(false)}
-                    style={{ 
-                      fontSize: '1.125rem', 
-                      padding: '1rem', 
-                      borderRadius: '12px',
-                      background: location.pathname === link.path ? 'var(--primary-light)' : 'transparent',
-                      color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-main)', 
-                      fontWeight: '700',
-                      textDecoration: 'none'
-                    }}
-                  >
-                    {link.name}
-                  </Link>
-                ))}
-                {isAdmin && (
-                  <button 
-                    onClick={() => { localStorage.clear(); window.location.href = '/'; }}
-                    className="btn btn-primary"
-                    style={{ marginTop: '0.5rem' }}
-                  >
-                    Logout
-                  </button>
-                )}
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsOpen(false)}
+              style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.2)', backdropFilter: 'blur(4px)', zIndex: 999 }}
+            />
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                background: 'var(--surface)',
+                borderTop: '1px solid var(--border-color)',
+                boxShadow: 'var(--shadow-lg)',
+                zIndex: 1000,
+                overflow: 'hidden'
+              }}
+            >
+              <div className="container" style={{ padding: '2rem 1.5rem' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  {navLinks.map(link => (
+                    <Link
+                      key={link.path}
+                      to={link.path}
+                      onClick={() => setIsOpen(false)}
+                      style={{
+                        fontSize: '1.25rem',
+                        padding: '1.25rem',
+                        borderRadius: 'var(--radius-lg)',
+                        background: location.pathname === link.path ? 'var(--primary-light)' : 'var(--bg-color)',
+                        color: location.pathname === link.path ? 'var(--primary)' : 'var(--text-main)',
+                        fontWeight: '800',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center'
+                      }}
+                    >
+                      {link.name}
+                      <ChevronRight size={18} opacity={0.5} />
+                    </Link>
+                  ))}
+                  {isAdmin && (
+                    <button
+                      onClick={() => { localStorage.clear(); window.location.href = '/'; }}
+                      className="btn btn-primary"
+                      style={{ marginTop: '1rem', padding: '1.25rem' }}
+                    >
+                      <LogOut size={20} /> Logout Account
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
 
-      <style dangerouslySetInnerHTML={{ __html: `
-        .navbar { height: 5rem; display: flex; align-items: center; position: sticky; top: 0; z-index: 1000; transition: box-shadow 0.3s; }
-        .navbar-container { display: flex; justify-content: space-between; align-items: center; width: 100%; }
-        @media (min-width: 768px) {
-          .desktop-nav { display: flex !important; gap: 0.5rem; align-items: center; }
+      <style>{`
+        .desktop-nav { display: none !important; }
+        .mobile-toggle { display: block !important; }
+        @media (min-width: 992px) {
+          .desktop-nav { display: flex !important; }
           .mobile-toggle { display: none !important; }
         }
-        .nav-link { position: relative; border-radius: 8px; }
-        .nav-link:hover { color: var(--primary) !important; background: var(--primary-light); }
-        .nav-link.active::after { content: ''; position: absolute; bottom: 4px; left: 1rem; right: 1rem; height: 3px; background: var(--primary); border-radius: 4px; display: none; }
-      `}} />
+        .nav-link:hover { color: var(--primary) !important; background: var(--primary-light) !important; }
+      `}</style>
     </nav>
   );
 };

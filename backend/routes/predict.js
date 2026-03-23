@@ -14,6 +14,16 @@ const calculateRank = (examType, marks) => {
   return 50000;
 };
 
+// @route GET /api/predict/branches
+router.get('/branches', async (req, res) => {
+  try {
+    const branches = await Cutoff.distinct('courseName');
+    res.json(branches.sort());
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
 // @route POST /api/predict
 router.post('/', async (req, res) => {
   try {
@@ -24,25 +34,34 @@ router.post('/', async (req, res) => {
     }
 
     // Step 1: Use actual rank if provided, otherwise predict (fallback)
-    const predictedRank = rank ? Number(rank) : calculateRank(examType, Number(marks));
+    const predictedRank = rank ? Math.round(Number(rank)) : Math.round(calculateRank(examType, Number(marks)));
 
-    // Step 2: Fetch colleges within a specific window: [rank-3000] to [rank+7000]
-    // Default to latest round available for that year/exam
-    const latestRoundRec = await Cutoff.findOne({ examType, year: new Date().getFullYear() - 1 }).sort({ roundNumber: -1 });
-    const roundToUse = latestRoundRec ? latestRoundRec.roundNumber : 1;
+    // Step 2: Fetch the latest year and round available for this examType
+    const latestRec = await Cutoff.findOne({ examType }).sort({ year: -1, roundNumber: -1 });
+    const yearUsed = latestRec ? latestRec.year : new Date().getFullYear();
+    const roundUsed = latestRec ? latestRec.roundNumber : 1;
 
-    const minRank = Math.max(1, predictedRank - 3000);
-    const maxRank = predictedRank + 7000;
+    const minRank = Math.max(1, predictedRank - 1000);
 
     let query = {
       examType,
       category,
-      roundNumber: roundToUse,
-      closingRank: { $gte: minRank, $lte: maxRank } 
+      year: yearUsed,
+      roundNumber: roundUsed,
+      closingRank: { $gte: minRank } 
     };
 
+    console.log('--- PREDICT QUERY ---');
+    console.log('Predicted Rank:', predictedRank);
+    console.log('Min Rank:', minRank);
+    console.log('Query:', JSON.stringify(query, null, 2));
+
     if (branch) {
-      query.courseName = new RegExp(branch, 'i');
+      // Create a flexible regex that allows optional spaces between any characters
+      const flexibleBranch = branch.trim().split('').map(c => 
+        c === ' ' ? '\\s+' : `${c.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\s*`
+      ).join('');
+      query.courseName = new RegExp(flexibleBranch, 'i');
     }
 
     // Sort by best colleges first
@@ -73,6 +92,8 @@ router.post('/', async (req, res) => {
 
     res.json({
       predictedRank,
+      yearUsed,
+      roundUsed,
       recommendations: processedRecommendations
     });
   } catch (error) {
