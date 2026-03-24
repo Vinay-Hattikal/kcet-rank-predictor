@@ -69,11 +69,10 @@ const Home = () => {
             transition={{ duration: 0.8 }}
           >
             <span className="badge" style={{ backgroundColor: 'var(--primary-light)', color: 'var(--primary)', marginBottom: '2rem', gap: '0.5rem', padding: '0.5rem 1.25rem' }}>
-              <Sparkles size={16} /> Updated for 2024-25 Rankings
+              <Sparkles size={16} /> Updated for 2026 KCET & COMEDK
             </span>
-            <h1 style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '900', letterSpacing: '-0.04em' }}>
-              Find Your <span className="gradient-text">Dream College</span> <br />
-              in Karnataka & Beyond
+            <h1 style={{ fontSize: 'clamp(2.2rem, 6vw, 4.5rem)', lineHeight: '1.1', marginBottom: '1.5rem', fontWeight: '900', letterSpacing: '-0.04em' }}>
+              KCET &amp; COMEDK <span className="gradient-text">College Predictor 2026</span>
             </h1>
             <p style={{ color: 'var(--text-muted)', fontSize: '1.25rem', maxWidth: '700px', margin: '0 auto 3rem', fontWeight: 500, lineHeight: 1.5 }}>
               Precision predictions powered by official KCET & COMEDK historical data. Start your engineering journey with confidence.
@@ -89,6 +88,15 @@ const Home = () => {
             <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)', fontWeight: 600 }}>
               Search any college to check specific round-wise cutoffs instantly.
             </p>
+
+            {/* Trust Badges */}
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap', marginTop: '1.5rem' }}>
+              {[{ icon: '✅', label: '100% Free' }, { icon: '🔒', label: 'No Signup Required' }, { icon: '📊', label: 'Official Cutoff Data' }, { icon: '⚡', label: 'Instant Results' }].map(badge => (
+                <span key={badge.label} style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', background: 'white', border: '1px solid var(--border-color)', borderRadius: '50px', padding: '0.4rem 1rem', fontSize: '0.82rem', fontWeight: 700, color: 'var(--text-main)', boxShadow: 'var(--shadow-sm)' }}>
+                  {badge.icon} {badge.label}
+                </span>
+              ))}
+            </div>
           </motion.div>
         </div>
       </section>
@@ -354,11 +362,25 @@ const Home = () => {
 
       </div>
       
+      {/* Sticky Mobile CTA */}
+      <div className="sticky-mobile-cta">
+        <a href="#predictor-form"
+          onClick={(e) => { e.preventDefault(); document.querySelector('.card.glass-card')?.scrollIntoView({ behavior: 'smooth' }); }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', width: '100%', padding: '1rem', background: 'linear-gradient(135deg, var(--primary), var(--primary-dark))', color: 'white', fontWeight: 800, fontSize: '1rem', border: 'none', cursor: 'pointer', textDecoration: 'none', borderRadius: '0' }}
+        >
+          ⚡ Predict My College — Free
+        </a>
+      </div>
+
       <style>{`
         .home-page { min-height: 100vh; background: var(--bg-color); }
         .hero-premium { position: relative; }
         @media (max-width: 768px) {
           .stat-border { border-left: none !important; border-right: none !important; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 1.5rem 0; }
+          .sticky-mobile-cta { display: block; position: fixed; bottom: 0; left: 0; right: 0; z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
+        }
+        @media (min-width: 769px) {
+          .sticky-mobile-cta { display: none; }
         }
       `}</style>
     </div>
