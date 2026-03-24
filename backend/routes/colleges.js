@@ -10,12 +10,26 @@ router.get('/', async (req, res) => {
     const { search } = req.query;
     let query = {};
     if (search) {
-      const escapedSearch = search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      query.name = { $regex: escapedSearch, $options: 'i' };
+      const escapedSearch = search.trim().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+      // Build an abbreviation-aware pattern: "rv" → r[.\s\-]*v
+      // This makes each character optionally separated by dots, spaces, or hyphens
+      const fuzzyAbbreviationPattern = escapedSearch
+        .split('')
+        .join('[.\\s\\-]*');
+
+      query = {
+        $or: [
+          // Direct substring match (e.g. "rv" matches "RV Institute")
+          { name: { $regex: escapedSearch, $options: 'i' } },
+          // Abbreviation-aware match (e.g. "rv" matches "R.V. College")
+          { name: { $regex: fuzzyAbbreviationPattern, $options: 'i' } }
+        ]
+      };
     }
     
     // If searching, limit results; otherwise return all (or use pagination if list is huge)
-    const colleges = await College.find(query).limit(search ? 10 : 100);
+    const colleges = await College.find(query).limit(search ? 15 : 100);
     res.json(colleges);
   } catch (error) {
     res.status(500).json({ message: error.message });
