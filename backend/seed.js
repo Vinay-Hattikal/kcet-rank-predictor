@@ -10,6 +10,13 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/college-pre
 
 const seedData = async () => {
   try {
+    // Safety check: Don't seed if data already exists unless forced
+    const existingColleges = await College.countDocuments();
+    if (existingColleges > 0 && process.argv[2] !== '--force') {
+      console.log('Database already has data. Use --force to re-seed.');
+      process.exit(0);
+    }
+    
     await User.deleteMany();
     await College.deleteMany();
     await Cutoff.deleteMany();
@@ -20,7 +27,7 @@ const seedData = async () => {
     await User.create({
       name: 'Admin',
       email: 'admin@collegepredictor.com',
-      password: 'password123',
+      password: 'admin123',
       role: 'admin'
     });
 

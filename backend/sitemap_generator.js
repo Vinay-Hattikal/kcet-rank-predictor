@@ -9,7 +9,7 @@ async function generateSitemap() {
         await mongoose.connect(process.env.MONGO_URI);
         const colleges = await College.find({}, 'slug');
         
-        const domain = 'https://yourdomain.com'; // User should change this
+        const domain = 'https://rank2college.in'; 
         const date = new Date().toISOString().split('T')[0];
 
         let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
