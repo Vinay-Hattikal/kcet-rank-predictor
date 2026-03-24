@@ -131,6 +131,13 @@ const PredictionResults = () => {
             <p style={{ color: 'var(--text-muted)', fontSize: '1.1rem', fontWeight: 500 }}>
               Based on {data.yearUsed || '2024'} Round {data.roundUsed || '1'} {location.state.formData.examType} Trends
             </p>
+            <button 
+              onClick={() => navigate('/')} 
+              className="btn btn-secondary" 
+              style={{ marginTop: '1.5rem', padding: '0.6rem 1rem', fontSize: '0.85rem' }}
+            >
+              <ChevronLeft size={16} /> Back to Search
+            </button>
           </motion.div>
 
           <motion.div 
