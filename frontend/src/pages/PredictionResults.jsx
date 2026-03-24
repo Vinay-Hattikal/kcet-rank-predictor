@@ -25,6 +25,9 @@ const PredictionResults = () => {
   const [filterLimit, setFilterLimit] = useState('all');
 
   useEffect(() => {
+    // Scroll to top on mount
+    window.scrollTo(0, 0);
+
     if (!location.state || !location.state.formData) {
       navigate('/');
       return;
@@ -39,6 +42,8 @@ const PredictionResults = () => {
         setError(err.response?.data?.message || 'Failed to fetch predictions');
       } finally {
         setLoading(false);
+        // Scroll to top again after loading finishes to be certain
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     };
 
