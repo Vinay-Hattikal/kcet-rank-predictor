@@ -103,6 +103,27 @@ const CollegeDetails = () => {
         title={`${college.name} Cutoff ${new Date().getFullYear()} | KCET, COMEDK Rankings`}
         description={`Get latest ${college.name} cutoff ranks for all categories (GM, SC, ST, etc.), fees structure, placements, and courses offered. Check your admission chances now.`}
         keywords={`${college.name} cutoff, ${college.name} kcet cutoff, ${college.name} comedk cutoff`}
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "EducationalOrganization",
+          "name": college.name,
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": college.location || "Karnataka",
+            "addressRegion": "Karnataka",
+            "addressCountry": "IN"
+          },
+          "url": `https://rank2college.in/college/${college.slug}`,
+          "logo": "https://rank2college.in/og-image.png",
+          "sameAs": [
+            "https://rank2college.in"
+          ],
+          "offers": {
+            "@type": "AggregateOffer",
+            "priceCurrency": "INR",
+            "price": "0"
+          }
+        }}
       />
 
       {/* Hero Section */}

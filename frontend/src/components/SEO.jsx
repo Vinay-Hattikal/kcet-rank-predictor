@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import { useEffect, useState } from 'react';
 
 const SEO = ({ 
   title, 
@@ -6,24 +7,41 @@ const SEO = ({
   keywords, 
   ogImage = '/og-image.png',
   ogType = 'website',
-  canonical = window.location.href
+  canonical: propCanonical,
+  structuredData
 }) => {
+  const [canonicalURL, setCanonicalURL] = useState('');
+
+  useEffect(() => {
+    setCanonicalURL(propCanonical || window.location.href);
+  }, [propCanonical]);
+
   const siteName = 'Rank2College';
-  const fullTitle = title ? `${title} | ${siteName}` : 'KCET & COMEDK Rank Predictor 2024';
+  const fullTitle = title ? `${title} | ${siteName}` : 'KCET & COMEDK Rank Predictor 2026';
+
+  const defaultStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": siteName,
+    "url": canonicalURL || "https://rank2college.in",
+    "description": description || "Predict your Karnataka engineering college admission chances with Rank2College.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Web"
+  };
 
   return (
     <Helmet>
       {/* Standard SEO */}
       <title>{fullTitle}</title>
-      <meta name="description" content={description || "Personalized KCET & COMEDK Rank Predictor by Rank2College. Get accurate admission chances for Karnataka engineering colleges based on 2024-25 cutoff trends."} />
-      <meta name="keywords" content={keywords || "KCET 2024 rank predictor, COMEDK college predictor 2024, Rank2College, KCET cutoff analysis, Karnataka engineering admission predictor, best rank predictor for KCET"} />
-      <link rel="canonical" href={canonical} />
+      <meta name="description" content={description || "Personalized KCET & COMEDK Rank Predictor by Rank2College. Get accurate admission chances for Karnataka engineering colleges based on 2025-26 cutoff trends."} />
+      <meta name="keywords" content={keywords || "KCET 2026 rank predictor, COMEDK college predictor 2026, Rank2College, KCET cutoff analysis, Karnataka engineering admission predictor, best rank predictor for KCET"} />
+      {canonicalURL && <link rel="canonical" href={canonicalURL} />}
 
       {/* Open Graph */}
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:type" content={ogType} />
-      <meta property="og:url" content={canonical} />
+      {canonicalURL && <meta property="og:url" content={canonicalURL} />}
       <meta property="og:image" content={ogImage} />
       <meta property="og:site_name" content={siteName} />
 
@@ -34,17 +52,15 @@ const SEO = ({
       <meta name="twitter:image" content={ogImage} />
 
       {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "name": siteName,
-          "url": canonical,
-          "description": description || "Predict your Karnataka engineering college admission chances with Rank2College.",
-          "applicationCategory": "EducationalApplication",
-          "operatingSystem": "Web"
-        })}
-      </script>
+      {structuredData ? (
+         <script type="application/ld+json">
+           {JSON.stringify(structuredData)}
+         </script>
+      ) : (
+        <script type="application/ld+json">
+          {JSON.stringify(defaultStructuredData)}
+        </script>
+      )}
     </Helmet>
   );
 };

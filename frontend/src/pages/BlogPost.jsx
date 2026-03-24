@@ -32,6 +32,29 @@ const BlogPost = () => {
       <SEO 
         title={`${post.title} | KCET 2026`}
         description={post.excerpt}
+        ogType="article"
+        structuredData={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": post.title,
+          "image": [
+            post.image || "https://rank2college.in/og-image.png"
+          ],
+          "datePublished": new Date(post.date).toISOString() || new Date().toISOString(),
+          "author": [{
+            "@type": "Person",
+            "name": post.author,
+            "url": "https://rank2college.in/about"
+          }],
+          "publisher": {
+            "@type": "Organization",
+            "name": "Rank2College",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://rank2college.in/og-image.png"
+            }
+          }
+        }}
       />
       
       {/* Hero Section */}
