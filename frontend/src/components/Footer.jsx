@@ -61,6 +61,7 @@ const Footer = () => {
           <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', fontWeight: 500 }}>&copy; 2024 Rank2College by <span style={{ color: 'var(--text-main)', fontWeight: 700 }}>Debug Spheres</span>. All rights reserved.</p>
           <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
              <Link to="/about" style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>About</Link>
+             <Link to="/blog" style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>Blog</Link>
              <Link to="/contact" style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>Contact</Link>
              <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>Privacy</Link>
              <Link to="/terms-of-service" style={{ color: 'var(--text-muted)', fontSize: '0.85rem', textDecoration: 'none', fontWeight: 600 }}>Terms</Link>

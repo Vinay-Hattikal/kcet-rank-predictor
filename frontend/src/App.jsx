@@ -18,6 +18,9 @@ const ContactUs = lazy(() => import('./pages/ContactUs'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const TermsOfService = lazy(() => import('./pages/TermsOfService'));
 const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+const RankRangePredictor = lazy(() => import('./pages/RankRangePredictor'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
 
 const LoadingFallback = () => (
   <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
@@ -45,6 +48,9 @@ const AnimatedRoutes = () => {
           <Route path="/privacy-policy" element={<PageWrapper><PrivacyPolicy /></PageWrapper>} />
           <Route path="/terms-of-service" element={<PageWrapper><TermsOfService /></PageWrapper>} />
           <Route path="/disclaimer" element={<PageWrapper><Disclaimer /></PageWrapper>} />
+          <Route path="/colleges-for-:exam-rank-:minRank-to-:maxRank" element={<PageWrapper><RankRangePredictor /></PageWrapper>} />
+          <Route path="/blog" element={<PageWrapper><Blog /></PageWrapper>} />
+          <Route path="/blog/:slug" element={<PageWrapper><BlogPost /></PageWrapper>} />
         </Routes>
       </Suspense>
     </AnimatePresence>
