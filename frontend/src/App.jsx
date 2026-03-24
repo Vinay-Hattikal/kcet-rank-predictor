@@ -4,6 +4,62 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import { ChevronUp } from 'lucide-react';
+
+// Scroll to top on every route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
+// Floating Back to Top button
+const BackToTop = () => {
+  const [visible, setVisible] = React.useState(false);
+
+  React.useEffect(() => {
+    const toggleVisible = () => {
+      if (window.scrollY > 400) setVisible(true);
+      else setVisible(false);
+    };
+    window.addEventListener('scroll', toggleVisible);
+    return () => window.removeEventListener('scroll', toggleVisible);
+  }, []);
+
+  return (
+    <AnimatePresence>
+      {visible && (
+        <motion.button
+          initial={{ opacity: 0, scale: 0.5, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          exit={{ opacity: 0, scale: 0.5, y: 20 }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          style={{
+            position: 'fixed',
+            bottom: '2rem',
+            right: '2rem',
+            width: '45px',
+            height: '45px',
+            borderRadius: '50%',
+            backgroundColor: 'var(--primary)',
+            color: 'white',
+            border: 'none',
+            cursor: 'pointer',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            boxShadow: 'var(--shadow-lg)',
+          }}
+        >
+          <ChevronUp size={24} />
+        </motion.button>
+      )}
+    </AnimatePresence>
+  );
+};
 
 // Lazy load pages for better performance (Code Splitting)
 const Home = lazy(() => import('./pages/Home'));
@@ -73,12 +129,14 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
+        <ScrollToTop />
         <div className="app-container" style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', backgroundColor: 'var(--bg-color)' }}>
           <Navbar />
           <main style={{ flex: 1, paddingTop: '2rem' }}>
             <AnimatedRoutes />
           </main>
           <Footer />
+          <BackToTop />
         </div>
       </Router>
     </HelmetProvider>
