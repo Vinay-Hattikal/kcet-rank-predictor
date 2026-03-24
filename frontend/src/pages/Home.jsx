@@ -173,14 +173,51 @@ const Home = () => {
                           </>
                         ) : (
                           <>
-                            <option value="GM">GM (General Merit)</option>
-                            <option value="SCG">SCG (SC General)</option>
-                            <option value="STG">STG (ST General)</option>
-                            <option value="KKR">KKR (Kalyana Karnataka)</option>
-                            {/* Shortened for brevity in Home view - complete list remains in state logic */}
-                            <option value="2AG">2AG (Category 2A)</option>
-                            <option value="3AG">3AG (Category 3A)</option>
-                            <option value="1G">1G (Category 1)</option>
+                            <optgroup label="General Merit">
+                              <option value="GM">GM (General Merit)</option>
+                              <option value="GMK">GMK (GM Kannada)</option>
+                              <option value="GMR">GMR (GM Rural)</option>
+                              <option value="GMP">GMP (GM Professional)</option>
+                            </optgroup>
+                            <optgroup label="Category 1">
+                              <option value="1G">1G (General)</option>
+                              <option value="1K">1K (Kannada)</option>
+                              <option value="1R">1R (Rural)</option>
+                            </optgroup>
+                            <optgroup label="Category 2A">
+                              <option value="2AG">2AG (General)</option>
+                              <option value="2AK">2AK (Kannada)</option>
+                              <option value="2AR">2AR (Rural)</option>
+                            </optgroup>
+                            <optgroup label="Category 2B">
+                              <option value="2BG">2BG (General)</option>
+                              <option value="2BK">2BK (Kannada)</option>
+                              <option value="2BR">2BR (Rural)</option>
+                            </optgroup>
+                            <optgroup label="Category 3A">
+                              <option value="3AG">3AG (General)</option>
+                              <option value="3AK">3AK (Kannada)</option>
+                              <option value="3AR">3AR (Rural)</option>
+                            </optgroup>
+                            <optgroup label="Category 3B">
+                              <option value="3BG">3BG (General)</option>
+                              <option value="3BK">3BK (Kannada)</option>
+                              <option value="3BR">3BR (Rural)</option>
+                            </optgroup>
+                            <optgroup label="SC/ST">
+                              <option value="SCG">SCG (SC General)</option>
+                              <option value="SCK">SCK (SC Kannada)</option>
+                              <option value="SCR">SCR (SC Rural)</option>
+                              <option value="STG">STG (ST General)</option>
+                              <option value="STK">STK (ST Kannada)</option>
+                              <option value="STR">STR (ST Rural)</option>
+                            </optgroup>
+                            <optgroup label="Special Categories">
+                              <option value="KKR">KKR (Kalyana-Karnataka)</option>
+                              <option value="NRI">NRI (Non-Resident Indian)</option>
+                              <option value="OPN">OPN (Open Category)</option>
+                              <option value="OTH">OTH (Other)</option>
+                            </optgroup>
                           </>
                         )}
                       </select>

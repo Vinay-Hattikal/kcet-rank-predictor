@@ -34,6 +34,7 @@ const Navbar = () => {
   }
 
   return (
+    <>
     <nav
       className={`navbar ${scrolled ? 'scrolled' : ''}`}
       style={{
@@ -111,6 +112,7 @@ const Navbar = () => {
           <Menu size={24} />
         </motion.button>
       </div>
+    </nav>
 
       {/* Mobile Side Drawer */}
       <AnimatePresence>
@@ -291,7 +293,7 @@ const Navbar = () => {
         }
         .nav-link:hover { color: var(--primary) !important; background: var(--primary-light) !important; }
       `}</style>
-    </nav>
+    </>
   );
 };
 
