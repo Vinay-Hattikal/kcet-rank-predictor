@@ -71,10 +71,6 @@ const Footer = () => {
               <div style={{ position: 'absolute', top: '-10px', right: '-10px', width: '60px', height: '60px', background: 'var(--primary)', opacity: 0.05, borderRadius: '50%' }}></div>
             </div>
             
-            <div style={{ marginTop: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.75rem', fontSize: '0.9rem', fontWeight: 600, color: 'var(--text-main)' }}>
-               <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: 'var(--secondary)' }}></div>
-               Need Expert Help? <Link to="/contact" style={{ color: 'var(--primary)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}>Contact Strategy Team <ExternalLink size={14} /></Link>
-            </div>
           </div>
         </div>
         
