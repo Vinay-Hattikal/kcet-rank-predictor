@@ -93,6 +93,8 @@ const AnimatedRoutes = () => {
       <Suspense fallback={<LoadingFallback />}>
         <Routes location={location} key={location.pathname}>
           <Route path="/" element={<PageWrapper><Home /></PageWrapper>} />
+          <Route path="/kcet-college-predictor" element={<PageWrapper><Home initialExam="KCET" /></PageWrapper>} />
+          <Route path="/comedk-college-predictor" element={<PageWrapper><Home initialExam="COMEDK" /></PageWrapper>} />
           <Route path="/results" element={<PageWrapper><PredictionResults /></PageWrapper>} />
           <Route path="/compare" element={<PageWrapper><Compare /></PageWrapper>} />
           <Route path="/login" element={<PageWrapper><Login /></PageWrapper>} />

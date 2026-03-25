@@ -16,7 +16,7 @@ async function generateSitemap() {
         xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
         // Static Pages
-        const staticPages = ['', '/compare', '/predict', '/premium-counseling', '/blog', '/about', '/contact'];
+        const staticPages = ['', '/kcet-college-predictor', '/comedk-college-predictor', '/compare', '/premium-counseling', '/blog', '/about', '/contact'];
         staticPages.forEach(page => {
             xml += `  <url>\n    <loc>${domain}${page}</loc>\n    <lastmod>${date}</lastmod>\n    <priority>${page === '' ? '1.0' : '0.8'}</priority>\n  </url>\n`;
         });

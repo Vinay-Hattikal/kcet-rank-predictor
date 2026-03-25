@@ -21,14 +21,21 @@ import {
   Instagram
 } from 'lucide-react';
 
-const Home = () => {
+const Home = ({ initialExam }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    examType: 'KCET',
+    examType: initialExam || 'KCET',
     rank: '',
     category: 'GM',
     branch: ''
   });
+
+  // Sync examType if prop changes (for route changes)
+  React.useEffect(() => {
+    if (initialExam) {
+      setFormData(prev => ({ ...prev, examType: initialExam }));
+    }
+  }, [initialExam]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -53,11 +60,21 @@ const Home = () => {
     visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: "easeOut" } }
   };
 
+  // Dynamic SEO based on exam
+  const seoTitle = formData.examType === 'COMEDK' 
+    ? "COMEDK College Predictor 2026 — Rank based Admission Prediction"
+    : "KCET College Predictor 2026 — Predict Your Engineering College";
+  
+  const seoDescription = formData.examType === 'COMEDK'
+    ? "Predict your dream engineering college in Karnataka with Rank2College COMEDK Predictor. Accurate admission chances based on COMEDK 2025-26 cutoff trends."
+    : "Predict your dream engineering college in Karnataka with Rank2College KCET Predictor. Get accurate admission chances based on KCET 2025-26 historical cutoff trends.";
+
   return (
     <div className="home-page fade-in">
       <SEO
-        title="KCET & COMEDK Rank Predictor 2024"
-        description="Predict your dream engineering college in Karnataka with Rank2College. Get accurate admission chances based on KCET & COMEDK 2024-25 historical cutoff trends."
+        title={seoTitle}
+        description={seoDescription}
+        keywords={`${formData.examType} 2026 rank predictor, ${formData.examType} college predictor 2026, Rank2College, Karnataka engineering admission predictor`}
       />
 
       {/* Hero Section */}
@@ -396,6 +413,33 @@ const Home = () => {
               <Instagram size={20} /> @mycetguide
             </motion.a>
           </motion.div>
+
+          {/* SEO Content Section */}
+          <section className="seo-content-section" style={{ padding: '4rem 0', borderTop: '1px solid var(--border-color)' }}>
+            <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '1.5rem', color: 'var(--text-main)' }}>
+                How to use the {formData.examType} College Predictor 2026?
+              </h2>
+              <div style={{ color: 'var(--text-muted)', lineHeight: '1.8', fontSize: '1.05rem' }}>
+                <p style={{ marginBottom: '1.5rem' }}>
+                  Our <strong>{formData.examType} College Predictor</strong> is designed to provide Karnataka engineering aspirants with the most accurate admission predictions. Whether you are appearing for the <strong>KCET 2026</strong> or <strong>COMEDK UGET 2026</strong>, knowing your admission chances early is crucial for a successful counseling strategy.
+                </p>
+                
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>Step-by-Step Guide for KCET & COMEDK Prediction</h3>
+                <ul style={{ marginBottom: '1.5rem', paddingLeft: '1.5rem' }}>
+                  <li><strong>Enter Your Rank:</strong> Input your actual or expected {formData.examType} rank. For broader results, you can also use our <Link to="/blog" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>rank range predictors</Link>.</li>
+                  <li><strong>Select Category:</strong> Choose your reservation category (e.g., GM, 2AG, SCG, STK). Reservation plays a massive role in Karnataka engineering cutoffs.</li>
+                  <li><strong>Pick a Branch:</strong> If you have a preference like Computer Science (CSE), Information Science (ISE), or Electronics (ECE), type it in.</li>
+                  <li><strong>Analyze:</strong> Click on "Analyze My Chances" to see a list of colleges where you have high, medium, or low admission probability.</li>
+                </ul>
+
+                <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text-main)' }}>Why Rank2College is the Best {formData.examType} Rank Predictor?</h3>
+                <p>
+                  Rank2College uses <strong>AI-powered algorithms</strong> mapped against three years of official KEA (Karnataka Examination Authority) and COMEDK counseling data. Unlike basic tools, we account for round-wise variations (Round 1, Round 2, and Second Extended Round) to give you a realistic picture of the counseling process. 
+                </p>
+              </div>
+            </div>
+          </section>
 
       </div>
       
