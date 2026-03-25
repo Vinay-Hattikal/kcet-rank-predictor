@@ -33,36 +33,66 @@ const BlogPost = () => {
         title={`${post.title} | KCET 2026`}
         description={post.excerpt}
         ogType="article"
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "Article",
-          "headline": post.title,
-          "image": [
-            post.image || "https://rank2college.in/og-image.png"
-          ],
-          "datePublished": new Date(post.date).toISOString() || new Date().toISOString(),
-          "author": [{
-            "@type": "Person",
-            "name": post.author,
-            "url": "https://rank2college.in/about"
-          }],
-          "publisher": {
-            "@type": "Organization",
-            "name": "Rank2College",
-            "logo": {
-              "@type": "ImageObject",
-              "url": "https://rank2college.in/og-image.png"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": post.title,
+            "image": [
+              post.image || "https://rank2college.in/og-image.png"
+            ],
+            "datePublished": new Date(post.date).toISOString() || new Date().toISOString(),
+            "author": [{
+              "@type": "Person",
+              "name": post.author,
+              "url": "https://rank2college.in/about"
+            }],
+            "publisher": {
+              "@type": "Organization",
+              "name": "Rank2College",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://rank2college.in/og-image.png"
+              }
             }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rank2college.in"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Blog",
+                "item": "https://rank2college.in/blog"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": post.title,
+                "item": `https://rank2college.in/blog/${post.slug}`
+              }
+            ]
           }
-        }}
+        ]}
       />
       
       {/* Hero Section */}
       <div style={{ background: 'var(--surface)', borderBottom: '1px solid var(--border-color)', paddingTop: '4rem', paddingBottom: '4rem' }}>
         <div className="container" style={{ maxWidth: '800px' }}>
-          <Link to="/blog" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: 'var(--text-muted)', fontWeight: 600, textDecoration: 'none', marginBottom: '2rem' }}>
-            <ArrowLeft size={16} /> Back to all articles
-          </Link>
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '2rem', opacity: 0.8, fontSize: '0.875rem', fontWeight: 600 }}>
+            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>Home</Link>
+            <ArrowLeft size={14} style={{ transform: 'rotate(90deg)', opacity: 0.5 }} />
+            <Link to="/blog" style={{ color: 'inherit', textDecoration: 'none' }}>Blog</Link>
+            <ArrowLeft size={14} style={{ transform: 'rotate(90deg)', opacity: 0.5 }} />
+            <span style={{ color: 'var(--primary)', fontWeight: 700 }}>Article</span>
+          </nav>
           
           <h1 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: 900, lineHeight: 1.2, marginBottom: '1.5rem', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
             {post.title}

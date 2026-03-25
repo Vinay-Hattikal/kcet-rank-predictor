@@ -35,9 +35,31 @@ const Footer = () => {
             </div>
           </div>
 
+          {/* Tools Column */}
+          <div style={{ flex: '0.5' }}>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1.5rem' }}>Predictors 2026</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.85rem' }}>
+              <li><Link to="/kcet-college-predictor" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>KCET College Predictor</Link></li>
+              <li><Link to="/comedk-college-predictor" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>COMEDK Predictor</Link></li>
+              <li><Link to="/compare" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>Compare Colleges</Link></li>
+              <li><Link to="/premium-counseling" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>Premium Strategy</Link></li>
+            </ul>
+          </div>
+
+          {/* Trending Column */}
+          <div style={{ flex: '0.5' }}>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '1.5rem' }}>Top Colleges</h4>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: '0.85rem' }}>
+              <li><Link to="/college/r-v-college-of-engineering" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>RVCE Bangalore</Link></li>
+              <li><Link to="/college/b-m-s-college-of-engineering" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>BMS College</Link></li>
+              <li><Link to="/college/m-s-ramaiah-institute-of-technology" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>MSRIT Bangalore</Link></li>
+              <li><Link to="/college/pes-university-100-feet-ring-road" style={{ color: 'var(--text-muted)', fontSize: '0.9rem', textDecoration: 'none', fontWeight: 600 }}>PES University</Link></li>
+            </ul>
+          </div>
+
           {/* Info Column */}
           <div style={{ flex: '1' }}>
-            <div style={{ background: 'var(--primary-light)', padding: '2rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--primary)', position: 'relative', overflow: 'hidden' }}>
+            <div style={{ background: 'var(--primary-light)', padding: '2.5rem', borderRadius: 'var(--radius-lg)', border: '1px solid var(--border-color)', position: 'relative', overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem', color: 'var(--primary-dark)' }}>
                 <ShieldCheck size={20} />
                 <h4 style={{ fontSize: '0.85rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Usage Policy</h4>

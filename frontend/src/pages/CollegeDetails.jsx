@@ -103,27 +103,67 @@ const CollegeDetails = () => {
         title={`${college.name} Cutoff ${new Date().getFullYear()} | KCET, COMEDK Rankings`}
         description={`Get latest ${college.name} cutoff ranks for all categories (GM, SC, ST, etc.), fees structure, placements, and courses offered. Check your admission chances now.`}
         keywords={`${college.name} cutoff, ${college.name} kcet cutoff, ${college.name} comedk cutoff`}
-        structuredData={{
-          "@context": "https://schema.org",
-          "@type": "EducationalOrganization",
-          "name": college.name,
-          "address": {
-            "@type": "PostalAddress",
-            "addressLocality": college.location || "Karnataka",
-            "addressRegion": "Karnataka",
-            "addressCountry": "IN"
+        structuredData={[
+          {
+            "@context": "https://schema.org",
+            "@type": "EducationalOrganization",
+            "name": college.name,
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": college.location || "Karnataka",
+              "addressRegion": "Karnataka",
+              "addressCountry": "IN"
+            },
+            "url": `https://rank2college.in/college/${college.slug}`,
+            "logo": "https://rank2college.in/og-image.png"
           },
-          "url": `https://rank2college.in/college/${college.slug}`,
-          "logo": "https://rank2college.in/og-image.png",
-          "sameAs": [
-            "https://rank2college.in"
-          ],
-          "offers": {
-            "@type": "AggregateOffer",
-            "priceCurrency": "INR",
-            "price": "0"
+          {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "Home",
+                "item": "https://rank2college.in"
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "name": "Colleges",
+                "item": "https://rank2college.in/blog"
+              },
+              {
+                "@type": "ListItem",
+                "position": 3,
+                "name": college.name,
+                "item": `https://rank2college.in/college/${college.slug}`
+              }
+            ]
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              {
+                "@type": "Question",
+                "name": `What is the KCET cutoff for ${college.name}?`,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": `The KCET cutoff for ${college.name} varies by branch and category. For example, popular branches like Computer Science typically have higher closing ranks compared to core branches. You can check the detailed round-wise cutoffs for all categories on our platform.`
+                }
+              },
+              {
+                "@type": "Question",
+                "name": `Does ${college.name} accept COMEDK scores?`,
+                "acceptedAnswer": {
+                  "@type": "Answer",
+                  "text": `${college.name} is one of the premier engineering colleges in Karnataka. Admission is typically through both KCET (for Karnataka candidates) and COMEDK UGET (for non-Karnataka and management quota candidates).`
+                }
+              }
+            ]
           }
-        }}
+        ]}
       />
 
       {/* Hero Section */}

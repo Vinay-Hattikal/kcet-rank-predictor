@@ -41,25 +41,39 @@
 
     <!-- Schema.org Structured Data -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Rank2College",
-      "url": "https://rank2college.in",
-      "description": "Predict your Karnataka engineering college admission chances with Rank2College.",
-      "applicationCategory": "EducationApplication",
-      "operatingSystem": "Web",
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "INR"
-      },
-      "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.8",
-        "ratingCount": "1200"
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Rank2College",
+        "alternateName": "MyCETGuide",
+        "url": "https://rank2college.in",
+        "logo": "https://rank2college.in/og-image.png",
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "email": "debugspheres@gmail.com",
+          "contactType": "customer service"
+        },
+        "sameAs": [
+          "https://www.instagram.com/mycetguide"
+        ]
       }
-    }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "url": "https://rank2college.in",
+        "name": "Rank2College",
+        "description": "Predict your Karnataka engineering college admission chances with Rank2College.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": {
+            "@type": "EntryPoint",
+            "urlTemplate": "https://rank2college.in/blog?q={search_term_string}"
+          },
+          "query-input": "required name=search_term_string"
+        }
+      }
     </script>
 
     <!-- FAQ Schema for Rich Snippets -->
