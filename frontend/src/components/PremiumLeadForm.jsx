@@ -63,9 +63,9 @@ const PremiumLeadForm = () => {
                                 />
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                            <div className="grid-2-col-responsive">
                                 <div className="form-group">
-                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>Phone Number</label>
+                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.4rem', display: 'block' }}>Phone Number</label>
                                     <input 
                                         type="tel" 
                                         name="phone"
@@ -77,7 +77,7 @@ const PremiumLeadForm = () => {
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>City</label>
+                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.4rem', display: 'block' }}>City</label>
                                     <input 
                                         type="text" 
                                         name="city"

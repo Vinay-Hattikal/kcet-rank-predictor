@@ -20,7 +20,7 @@ const PremiumCounseling = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="card glass"
-          style={{ padding: '3rem', border: '2px solid #FFD700' }}
+          style={{ padding: 'clamp(1.25rem, 5vw, 3rem)', border: '2px solid #FFD700' }}
         >
           <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
             <span className="badge" style={{ backgroundColor: '#FFD700', color: '#000', marginBottom: '1rem', fontWeight: '800' }}>
@@ -37,7 +37,7 @@ const PremiumCounseling = () => {
           {/* Lead Capturing Form */}
           <PremiumLeadForm />
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '3rem' }}>
             <div>
               <h3 style={{ fontSize: '1.25rem', marginBottom: '1.5rem', fontWeight: '800' }}>What You Get:</h3>
               <ul style={{ padding: 0, listStyle: 'none', display: 'grid', gap: '1rem' }}>
@@ -84,7 +84,7 @@ const PremiumCounseling = () => {
               <li>• The ₹500 fee is a one-time payment and is non-refundable once the personalized report is shared.</li>
               <li>• Our analysis is based on historical cutoff data and current year trends. It is intended to be a strategic guide.</li>
               <li>• We do not "guarantee" admission to specific colleges, as actual seat allocation depends entirely on KEA/COMEDK's official process.</li>
-              <li>• Support is valid until the completion of the final round of the 2024-25 counseling cycle.</li>
+              <li>• Support is valid until the completion of the final round of the 2026-27 counseling cycle.</li>
               <li>• Personalized reports will be delivered within 24-48 hours of rank and category verification.</li>
             </ul>
           </div>

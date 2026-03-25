@@ -248,6 +248,16 @@ option {
 
   .mobile-hide { display: none !important; }
   .mobile-only { display: block !important; }
+
+  .grid-2-col-responsive {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+.grid-2-col-responsive {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.25rem;
 }
 
 @media (min-width: 769px) {
