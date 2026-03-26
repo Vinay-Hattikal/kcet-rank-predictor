@@ -7,7 +7,8 @@ const PremiumLeadForm = () => {
         name: '',
         phone: '',
         city: '',
-        rank: ''
+        rank: '',
+        coupon: ''
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -90,16 +91,30 @@ const PremiumLeadForm = () => {
                                 </div>
                             </div>
 
-                            <div className="form-group">
-                                <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>KCET Rank (Optional)</label>
-                                <input 
-                                    type="number" 
-                                    name="rank"
-                                    value={formData.rank}
-                                    onChange={handleChange}
-                                    className="form-input" 
-                                    placeholder="Enter your rank" 
-                                />
+                            <div className="grid-2-col-responsive">
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>KCET Rank (Optional)</label>
+                                    <input 
+                                        type="number" 
+                                        name="rank"
+                                        value={formData.rank}
+                                        onChange={handleChange}
+                                        className="form-input" 
+                                        placeholder="Enter your rank" 
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>Coupon / Referral Code</label>
+                                    <input 
+                                        type="text" 
+                                        name="coupon"
+                                        value={formData.coupon}
+                                        onChange={handleChange}
+                                        className="form-input" 
+                                        placeholder="Optional code" 
+                                    />
+                                </div>
                             </div>
 
                             <motion.button 

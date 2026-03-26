@@ -33,11 +33,11 @@ const protectAdmin = async (req, res, next) => {
 // @access Public
 router.post('/', async (req, res) => {
   try {
-    const { name, phone, city, rank } = req.body;
+    const { name, phone, city, rank, coupon } = req.body;
     if (!name || !phone || !city) {
       return res.status(400).json({ message: 'Missing required fields' });
     }
-    const lead = await Lead.create({ name, phone, city, rank });
+    const lead = await Lead.create({ name, phone, city, rank, coupon });
     res.status(201).json({ success: true, lead });
   } catch (error) {
     res.status(500).json({ message: error.message });

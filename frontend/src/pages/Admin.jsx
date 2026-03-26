@@ -88,8 +88,9 @@ const Admin = () => {
     doc.text('Name', 14, y);
     doc.text('Phone', 60, y);
     doc.text('City', 100, y);
-    doc.text('Rank', 140, y);
-    doc.text('Date', 170, y);
+    doc.text('Rank', 130, y);
+    doc.text('Coupon', 155, y);
+    doc.text('Date', 180, y);
     
     doc.setLineWidth(0.5);
     doc.line(14, y + 2, 200, y + 2);
@@ -105,8 +106,9 @@ const Admin = () => {
       doc.text(lead.name.substring(0, 20), 14, y);
       doc.text(lead.phone, 60, y);
       doc.text(lead.city.substring(0, 15), 100, y);
-      doc.text(lead.rank ? lead.rank.toString() : 'N/A', 140, y);
-      doc.text(dateStr, 170, y);
+      doc.text(lead.rank ? lead.rank.toString() : 'N/A', 130, y);
+      doc.text(lead.coupon ? lead.coupon.substring(0, 10) : '-', 155, y);
+      doc.text(dateStr, 180, y);
       y += 8;
     });
     
@@ -377,7 +379,8 @@ const Admin = () => {
                         </td>
                         <td style={{ padding: '1rem' }}>
                           <div style={{ fontSize: '0.9rem' }}>{lead.city}</div>
-                          {lead.rank && <div className="badge" style={{ marginTop: '0.25rem', backgroundColor: '#e0f2fe', color: '#0369a1' }}>Rank: {lead.rank}</div>}
+                          {lead.rank && <div className="badge" style={{ marginTop: '0.25rem', backgroundColor: '#e0f2fe', color: '#0369a1', marginRight: '0.5rem' }}>Rank: {lead.rank}</div>}
+                          {lead.coupon && <div className="badge" style={{ marginTop: '0.25rem', backgroundColor: '#fef3c7', color: '#b45309' }}>Code: {lead.coupon}</div>}
                         </td>
                         <td style={{ padding: '1rem', textAlign: 'right', fontSize: '0.85rem' }}>
                           <div>{new Date(lead.createdAt).toLocaleDateString()}</div>

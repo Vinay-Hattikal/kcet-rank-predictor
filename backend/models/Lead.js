@@ -5,6 +5,7 @@ const leadSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   city: { type: String, required: true },
   rank: { type: Number },
+  coupon: { type: String },
   createdAt: { type: Date, default: Date.now }
 });
 
