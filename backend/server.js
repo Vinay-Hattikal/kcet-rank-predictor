@@ -11,7 +11,7 @@ const app = express();
 app.set('trust proxy', 1);
 
 // Middleware
-app.use(helmet()); // Security headers
+app.use(helmet({ crossOriginResourcePolicy: { policy: "cross-origin" } })); // Security headers strictly allowing cross-origin API calls
 app.use(cors());
 app.use(express.json({ limit: '10mb' })); // Reduced limit for security
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
