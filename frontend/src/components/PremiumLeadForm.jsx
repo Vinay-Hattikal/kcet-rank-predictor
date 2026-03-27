@@ -95,10 +95,15 @@ const PremiumLeadForm = () => {
                                 <div className="form-group">
                                     <label className="form-label" style={{ fontWeight: '600', fontSize: '0.85rem', marginBottom: '0.5rem', display: 'block' }}>KCET Rank (Optional)</label>
                                     <input 
-                                        type="number" 
+                                        type="text" 
                                         name="rank"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
                                         value={formData.rank}
-                                        onChange={handleChange}
+                                        onChange={(e) => {
+                                          const val = e.target.value.replace(/\D/g, '');
+                                          handleChange({ target: { name: 'rank', value: val }});
+                                        }}
                                         className="form-input" 
                                         placeholder="Enter your rank" 
                                     />

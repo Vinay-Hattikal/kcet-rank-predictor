@@ -175,7 +175,7 @@ const Home = ({ initialExam }) => {
 
                     <div className="form-group">
                       <label style={{ fontWeight: 700, fontSize: '0.85rem', color: 'var(--text-main)', marginBottom: '0.6rem', display: 'block', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Your Rank</label>
-                      <input type="number" name="rank" value={formData.rank} onChange={handleChange} className="form-input" placeholder="e.g. 15000" min="1" required style={{ borderRadius: 'var(--radius-md)' }} />
+                      <input type="text" inputMode="numeric" pattern="[0-9]*" name="rank" value={formData.rank} onChange={(e) => { const val = e.target.value.replace(/\D/g, ''); handleChange({ target: { name: 'rank', value: val }}); }} className="form-input" placeholder="e.g. 15000" min="1" required style={{ borderRadius: 'var(--radius-md)' }} />
                     </div>
                   </div>
 
