@@ -19,7 +19,7 @@ app.use(express.urlencoded({ limit: '10mb', extended: true }));
 // Rate Limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 2000, // Increased limit each IP to 2000 requests per windowMs to prevent false 'not responding' issues
   message: { message: 'Too many requests from this IP, please try again after 15 minutes' },
   standardHeaders: true,
   legacyHeaders: false,
@@ -79,3 +79,17 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => {
     console.error('MongoDB connection error:', err);
   });
+
+// Handle uncaught exceptions and unhandled rejections to prevent complete server crash
+process.on('uncaughtException', (err) => {
+  console.error('UNCAUGHT EXCEPTION! 💥 Shutting down gracefully...');
+  console.error(err.name, err.message, err.stack);
+  // Optional: exit process or keep alive (Railway restarts on exit)
+  // process.exit(1); 
+});
+
+process.on('unhandledRejection', (err) => {
+  console.error('UNHANDLED REJECTION! 💥');
+  console.error(err);
+  // Do not crash the entire app if a promise rejects
+});
